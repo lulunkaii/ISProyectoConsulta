@@ -1,21 +1,30 @@
 import datetime
+def sort_dates(lines):
+        
+        # definir una función que recibe una línea de texto y retorna la fecha formateada como objeto datetime
+        def date_key(line_string):
+            fecha_str = line_string.split(";")[0]
+            fecha_format = datetime.datetime.strptime(fecha_str, '%Y-%m-%d %H:%M')
+            return fecha_format
+        
+        # sortear segun la fecha
+        return sorted(lines, key=date_key)
+     
+def escribir_a_archivo(nombre, correo, fecha):
 
-def writeToFile(nombre, correo, fecha):
+    fecha = fecha.strftime("%Y-%m-%d %H:%M") # 2021-09-01 12:00:00
 
-    posicion_a_insertar = 0
-    with open("usuarios.csv", "a+") as file:
-        for line in file:
-            fecha_agendada = line.split(";")[0]
-            if fecha_agendada >= fecha.strftime("%Y-%m-%d %H:%M:%S"):
-                break
-            
-            posicion_a_insertar += 1
-
-    posicion_a_insertar = 2
-    fecha.strftime("%Y-%m-%d %H:%M:%S") # 2021-09-01 12:00:00
     with open("usuarios.csv", "a") as file:
-        file.seek(posicion_a_insertar)
         file.write(f"{fecha};{nombre};{correo}\n")
-
+    
+    lines = []
+    with open("usuarios.csv", "r") as file:
+        lines = file.readlines()
+    
+    lines = sort_dates(lines)
+    
+    with open("usuarios.csv", "w") as file:
+        for line in lines:
+            file.write(line)
+    
     return
-
