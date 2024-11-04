@@ -13,7 +13,7 @@ def login():
         name = request.form['name-input']
         email = request.form['email-input']
 
-        writeToFile(name, email, datetime.datetime.now())
+        escribir_a_archivo(name, email, datetime.datetime.now())
         
         return redirect(url_for('user', usr=name))
     else:
