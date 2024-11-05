@@ -87,7 +87,18 @@ function generateWeeklyCalendar(day, month, year) {
             button.onclick = function() {
                 if (!this.disabled) {
                     this.classList.add("selected");
-                    this.disabled = true; // Deshabilita el botón tras seleccionarlo
+                    this.disabled = true;
+            
+                    // Obtiene la fecha y hora seleccionada
+                    const selectedDay = new Date(date);
+                    selectedDay.setDate(date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1) + dayIndex);
+                    selectedDay.setHours(hour);
+            
+                    // Formatea la fecha y hora para enviarla como parámetro
+                    const formattedDate = selectedDay.toISOString().slice(0, 16); // Formato: YYYY-MM-DDTHH:MM
+            
+                    // Redirige a form.html con la fecha y hora seleccionadas como parámetros
+                    window.location.href = `form.html?fechaCita=${encodeURIComponent(formattedDate)}`;
                 }
             };
 
