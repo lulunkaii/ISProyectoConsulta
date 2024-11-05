@@ -1,19 +1,28 @@
 from flask import Flask, redirect, render_template, request, url_for
 from funciones import *
+import datetime
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST']) # GET is not secure, POST is secure
+@app.route('/', methods=['GET', 'POST']) # GET is not secure, POST is secure
+
 def login():
 
     if request.method == 'POST':
+        
         name = request.form['name-input']
         email = request.form['email-input']
+        rut = request.form['rut-input']
+        fecha = request.form['date-input']
+        motivo = request.form['motivo-input']
 
-        escribir_a_archivo(name, email, datetime.datetime.now())
+        fecha = fecha.split("-");
+        fecha_cita = datetime.datetime(int(fecha[0]), int(fecha[1]), int(fecha[2]))
+    
+        escribir_a_archivo(name, email, fecha_cita, rut, motivo)
         
         return redirect(url_for('user', usr=name))
     else:
