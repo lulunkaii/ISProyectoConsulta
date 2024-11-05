@@ -1,5 +1,5 @@
 from flask import Flask, redirect, render_template, request, url_for
-from funciones import *
+from funciones_escritura import escribir_a_archivo
 import datetime
 app = Flask(__name__)
 
@@ -21,8 +21,9 @@ def login():
 
         fecha = fecha.split("-");
         fecha_cita = datetime.datetime(int(fecha[0]), int(fecha[1]), int(fecha[2]))
-    
-        escribir_a_archivo(name, email, fecha_cita, rut, motivo)
+
+        medico_ID = "00001"
+        escribir_a_archivo(medico_ID, name, email, fecha_cita, rut, motivo)
         
         return redirect(url_for('user', usr=name))
     else:

@@ -1,0 +1,1 @@
+        escribir_a_archivo(nombre1, correo1, fecha1)
