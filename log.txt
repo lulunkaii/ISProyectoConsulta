@@ -1,1 +1,3 @@
-La id de medico no existe.La id de medico no existe.La id de medico no existe.La id de medico no existe.La id de medico no existe.
+<2024-11-06 16:01:42.998765> Error. Formato de rut incorrecto.
+<2024-11-06 16:01:42.998765> Error. Formato de fecha incorrecto.
+<2024-11-06 16:01:42.998765> Error. La ID de medico no existe.

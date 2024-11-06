@@ -22,7 +22,7 @@ def login():
         fecha = fecha.split("-");
         fecha_cita = datetime.datetime(int(fecha[0]), int(fecha[1]), int(fecha[2]))
 
-        medico_ID = "00001"
+        medico_ID = "00003"
         escribir_a_archivo(medico_ID, name, email, fecha_cita, rut, motivo)
         
         return redirect(url_for('user', usr=name))
