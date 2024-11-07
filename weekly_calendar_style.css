@@ -64,5 +64,5 @@ body {
 
 /* Estilo de los botones seleccionados */
 .selected {
-    background-color: red; /* Fondo rojo */
+    background-color: orange; /* Fondo rojo */
 }

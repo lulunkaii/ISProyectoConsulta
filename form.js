@@ -9,5 +9,13 @@ document.addEventListener("DOMContentLoaded", function() {
     if (fechaCita) {
         document.getElementById("fechaCita").value = fechaCita;
     }
+
+    const form = document.getElementById("formCita");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita el envío del formulario por defecto
+
+        // Si el formulario se envía correctamente, redirige a la nueva página
+        window.location.href = "medico.html";
+    });
 });
-    
