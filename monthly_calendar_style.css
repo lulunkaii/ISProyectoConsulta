@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css?family=Questrial&display=swap');
+
+/* Estilo general del cuerpo de la página */
+body {
+    background: #fad390; /* Color de fondo */
+    font-family: 'Questrial', sans-serif; /* Fuente de texto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura de la ventana gráfica */
+}
+
+/* Estilo del contenedor del calendario */
+.calendar {
+    display: inline-grid;
+    justify-content: center;
+    align-items: center;
+    background: #fff; /* Fondo blanco */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: 0px 40px 30px -20px rgba(0, 0, 0, 0.3); /* Sombra */
+}
+
+/* Estilo del encabezado del mes */
+.month {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px; /* Tamaño de fuente */
+    margin-bottom: 20px; /* Margen inferior */
+    font-weight: 300; /* Grosor de fuente */
+}
+
+/* Estilo del año dentro del encabezado del mes */
+.month .year {
+    font-weight: 600; /* Grosor de fuente */
+    margin-left: 10px; /* Margen izquierdo */
+}
+
+/* Estilo de los botones de navegación */
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Sin subrayado */
+    color: #0a3d62; /* Color del texto */
+    width: 40px; /* Ancho del botón */
+    height: 40px; /* Altura del botón */
+    border-radius: 40px; /* Bordes redondeados */
+    transition-duration: .2s; /* Duración de la transición */
+    position: relative;
+}
+
+.nav:hover {
+    background: #eee;
+}
+
+.days {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(7, 1fr);
+    color: #999;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.days span {
+    width: 50px;
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+}
+
+.dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.dates button {
+    cursor: pointer;
+    outline: 0;
+    border: 0;
+    background: transparent;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    justify-self: center;
+    align-self: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    margin: 2px;
+    transition-duration: .2s;
+}
+
+.dates button.today {
+    box-shadow: inset 0px 0px 0px 2px #0a3d62;
+}
+
+.dates button:hover {
+    background: #eee;
+}
+
+.dates button:focus {
+    background: #0a3d62;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Estilo de la tabla del calendario */
+.calendar-weekly {
+    border-collapse: collapse; /* Colapsar bordes */
+    width: 100%; /* Ancho completo */
+    max-width: 800px; /* Ancho máximo */
+    background: #fff; /* Fondo blanco */
+    box-shadow: 0px 40px 30px -20px rgba(0, 0, 0, 0.3); /* Sombra */
+    border-radius: 5px; /* Bordes redondeados */
+    overflow: hidden; /* Ocultar desbordamiento */
+    text-align: center; /* Alinear texto al centro */
+}
+
+/* Estilo de las celdas y encabezados de la tabla */
+.calendar-weekly th, .calendar-weekly td {
+    padding: 0; /* Sin espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    width: 100px; /* Ancho fijo para cada celda */
+    height: 60px; /* Altura fija para cada celda */
+}
+
+/* Estilo de los encabezados de la tabla */
+.calendar-weekly th {
+    background-color: #f6e58d; /* Fondo amarillo claro */
+    color: #333; /* Color del texto */
+}
+
+/* Estilo de los botones de fecha y hora */
+.date-button, .hour-button {
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Altura completa */
+    background-color: lightgray; /* Fondo gris claro */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor de puntero */
+    display: block;
+    box-sizing: border-box; /* Incluir relleno y borde en el tamaño total */
+    padding: 0; /* Sin espaciado interno */
+}
+
+/* Estilo de los botones al pasar el cursor */
+.date-button:hover, .hour-button:hover {
+    background-color: gray; /* Fondo gris oscuro */
+}
+
+/* Estilo de los botones seleccionados */
+.selected {
+    background-color: red; /* Fondo rojo */
+}

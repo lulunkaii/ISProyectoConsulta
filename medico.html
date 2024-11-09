@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda del Médico</title>
+    <link rel="stylesheet" href="medico_style.css">
+</head>
+<body>
+
+    <div class="card">
+        <h2>Dr. Juan Pérez</h2>
+        <h3>Cardiólogo</h3>
+
+        <div class="months">
+            <button onclick="clickeado('enero')">Enero</button>
+            <button onclick="clickeado('febrero')">Febrero</button>
+            <button onclick="clickeado('marzo')">Marzo</button>
+            <button onclick="clickeado('abril')">Abril</button>
+            <button onclick="clickeado('mayo')">Mayo</button>
+            <button onclick="clickeado('junio')">Junio</button>
+            <button onclick="clickeado('julio')">Julio</button>
+            <button onclick="clickeado('agosto')">Agosto</button>
+            <button onclick="clickeado('septiembre')">Septiembre</button>
+            <button onclick="clickeado('octubre')">Octubre</button>
+            <button onclick="clickeado('noviembre')">Noviembre</button>
+            <button onclick="clickeado('diciembre')">Diciembre</button>
+        </div>
+    </div>
+
+    <script>
+        function clickeado(mes) {
+            window.location.href = `monthly_calendar.html?mes=${mes}`;
+        }
+    </script>
+
+</body>
+</html>
