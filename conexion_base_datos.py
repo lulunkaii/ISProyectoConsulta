@@ -49,8 +49,8 @@ def crear_base_de_datos():
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS agendas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        medico TEXT NOT NULL,
-        fecha DATETIME NOT NULL
+        medico_id INTERGER NOT NULL,
+        fecha TEXT NOT NULL
     )
     ''')
 
@@ -81,27 +81,35 @@ def ingresar_cita(id_medico, usuario_rut, fecha, motivo):
 # @param nombre Nombre del usuario
 # @param email Email del usuario
 # @param numero_telefonico Numero telefonico del usuario
-def ingresar_usuario(rut, nombre, email, numero_telefonico):
+def ingresar_usuario(rut, nombre, email, edad,numero_telefonico):
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
     rut_num = re.sub('[^0-9]','', rut)
-    cursor.execute("INSERT INTO usuarios VALUES(?, ?, ?)", (rut_num, nombre, email, numero_telefonico))
+    cursor.execute("INSERT INTO usuarios VALUES(?, ?, ?, ?, ?)", (rut_num, nombre, email, edad, numero_telefonico))
     conn.commit()
     conn.close()
 
 def ingresar_medico(rut, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad):
+
+    rut_num = int(re.sub('[^0-9]','', rut))
+
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO medicos VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)", (rut, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad))
+    cursor.execute("INSERT INTO medicos VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?)", (rut_num, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad))
     conn.commit()
+
+    lista = cursor.execute("SELECT * FROM medicos").fetchall()
+
     conn.close()
 
-def ingresar_hora_agenda(medico, fecha):
+def ingresar_hora_agenda(medico_id, fecha):
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO agendas VALUES(NULL, ?, ?)", (medico, fecha))
+    fecha = str(fecha)
+
+    cursor.execute("INSERT INTO agendas VALUES(NULL, ?, ?)", (medico_id, fecha))
     conn.commit()
     conn.close()
 
@@ -154,8 +162,6 @@ def eliminar_usuario(rut):
 def eliminar_medico(id):
     pass
 
-
-
 def resetear_base_de_datos():
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
@@ -166,5 +172,19 @@ def resetear_base_de_datos():
     conn.commit()
     conn.close()
 
-crear_base_de_datos()
-# resetear_base_de_datos()
+
+def imprimir_base_de_datos():
+
+    conn = sqlite3.connect('centro_medico.db')
+    cursor = conn.cursor()
+
+    print("Tabla citas")
+    print(cursor.execute("SELECT * FROM citas").fetchall())
+    print("Tabla medicos")
+    print(cursor.execute("SELECT * FROM medicos").fetchall())
+    print("Tabla agendas")
+    print(cursor.execute("SELECT * FROM agendas").fetchall())
+    print("Tabla usuarios")
+    print(cursor.execute("SELECT * FROM usuarios").fetchall())
+
+    conn.close()
