@@ -25,6 +25,18 @@ function getMonthIndex(monthName) {
     return months.indexOf(monthName.toLowerCase());
 }
 
+// Lista de horas y fechas agendadas (Para probar)
+const agendadas = [
+    { fecha: '2024-11-08', hora: 8 },
+    { fecha: '2024-11-08', hora: 9 },
+];
+
+// Lista de horas y fechas en proceso (Para probar)
+const en_proceso = [
+    { fecha: '2024-11-08', hora: 10 },
+    { fecha: '2024-11-08', hora: 11 },
+];
+
 // Función para generar el calendario semanal basado en el día, mes y año proporcionados.
 function generateWeeklyCalendar(day, month, year) {
     const container = document.getElementById("calendarContainer");
@@ -44,6 +56,10 @@ function generateWeeklyCalendar(day, month, year) {
     
     // Crea un array de horas, empezando desde las 8:00 hasta las 20:00 (13 horas)
     const hoursOfDay = Array.from({ length: 13 }, (_, i) => 8 + i);
+
+    // Inicializa la matriz de selección
+    var selectionMatrix = Array.from({ length: hoursOfDay.length }, () => Array(daysOfWeek.length).fill(0));
+    console.log("Matriz de selección inicializada:", selectionMatrix);
 
     // Crea la estructura de la tabla del calendario
     const table = document.createElement("table");
@@ -69,7 +85,7 @@ function generateWeeklyCalendar(day, month, year) {
     table.appendChild(headerRow);
 
     // Crea las filas de horas en la tabla, con una celda para cada hora y botones dentro de cada celda
-    hoursOfDay.forEach((hour) => {
+    hoursOfDay.forEach((hour, hourIndex) => {
         const row = document.createElement("tr");
 
         // Primera columna con la hora de la fila
@@ -82,23 +98,45 @@ function generateWeeklyCalendar(day, month, year) {
             const cell = document.createElement("td");
             const button = document.createElement("button");
 
+            // Verificar si la fecha y hora están agendadas
+            const currentDay = new Date(date);
+            currentDay.setDate(date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1) + dayIndex);
+            const formattedDate = currentDay.toISOString().split('T')[0];
+            const isAgendada = agendadas.some(a => a.fecha === formattedDate && a.hora === hour);
+            const isEnProceso = en_proceso.some(a => a.fecha === formattedDate && a.hora === hour);
+
+            // Verificar si la fecha y hora ya pasaron
+            const now = new Date();
+            const currentDateTime = new Date(`${formattedDate}T${hour.toString().padStart(2, '0')}:00:00`);
+
+            // Configuración del botón para mostrar si está agendado o no
+            if (isAgendada || isEnProceso || currentDateTime < now) {
+                if (isAgendada) {
+                    button.classList.add("selected"); // Añade la clase de seleccionado
+                    button.style.backgroundColor = "red"; // Añade el fondo rojo
+                } else if (isEnProceso) {
+                    button.classList.add("in-process"); // Añade la clase de en proceso
+                    button.style.backgroundColor = "orange"; // Añade el fondo amarillo
+                } else if (currentDateTime < now) {
+                    button.classList.add("past"); // Añade la clase de pasado
+                    button.style.backgroundColor = "gray"; // Añade el fondo gris
+                }
+                button.disabled = true; // Deshabilita el botón
+                button.style.cursor = "not-allowed"; // Fuerza el cursor
+                button.onmouseenter = null; // Elimina cualquier cambio de hover
+                button.onmouseleave = null; // Evita que se cambie al quitar el hover
+            }
+
             // Configuración del botón para seleccionarlo al hacer clic
             button.className = "hour-button";
             button.onclick = function() {
                 if (!this.disabled) {
                     this.classList.add("selected");
                     this.disabled = true;
-            
-                    // Obtiene la fecha y hora seleccionada
-                    const selectedDay = new Date(date);
-                    selectedDay.setDate(date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1) + dayIndex);
-                    selectedDay.setHours(hour);
-            
-                    // Formatea la fecha y hora para enviarla como parámetro
-                    const formattedDate = selectedDay.toISOString().slice(0, 16); // Formato: YYYY-MM-DDTHH:MM
-            
-                    // Redirige a form.html con la fecha y hora seleccionadas como parámetros
-                    window.location.href = `form.html?fechaCita=${encodeURIComponent(formattedDate)}`;
+                    selectionMatrix[hourIndex][dayIndex] = 1;
+                    console.log("Matriz de selección actualizada:", selectionMatrix);
+                    // Redirigir a la página de formulario con la fecha y hora seleccionadas
+                    window.location.href = `form.html?fechaCita=${encodeURIComponent(formattedDate + 'T' + hour + ':00')}`;
                 }
             };
 
