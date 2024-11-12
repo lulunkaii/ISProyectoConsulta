@@ -17,14 +17,17 @@ def reserva():
     doctor_name = request.args.get('doctor', 'Médico no seleccionado')
     return render_template('reservar.html', doctor=doctor_name)
 
-
 @app.route('/autocomplete', methods=['GET'])
 def autocomplete():
     query = request.args.get('q', '').lower()
+    specialty = request.args.get('specialty', '').lower()
+
     suggestions = [
         {"name": doctor["name"], "specialty": doctor["specialty"]}
-        for doctor in doctors if query in doctor["name"].lower()
+        for doctor in doctors
+        if query in doctor["name"].lower() and (specialty == '' or specialty in doctor["specialty"].lower())
     ]
+    
     return jsonify(suggestions)
 
 if __name__ == '__main__':

@@ -10,6 +10,15 @@
         <h1>Búsqueda de Doctores</h1>
         <div class="search-container">
             <input type="text" id="search" placeholder="Escribe el nombre del doctor" autocomplete="off">
+            
+            <!-- Filtro por especialidad -->
+            <select id="specialtyFilter">
+                <option value="">Seleccionar especialidad</option>
+                <option value="Cardiología">Cardiología</option>
+                <option value="Pediatría">Pediatría</option>
+                <option value="Neurología">Neurología</option>
+            </select>
+
             <ul id="suggestions"></ul>
             <button id="selectButton" disabled>Seleccionar</button>
         </div>
@@ -17,14 +26,17 @@
 
     <script>
         const searchInput = document.getElementById('search');
+        const specialtyFilter = document.getElementById('specialtyFilter');
         const suggestionsBox = document.getElementById('suggestions');
         const selectButton = document.getElementById('selectButton');
-        let selectedDoctor = null; // Variable para almacenar el médico seleccionado
+        let selectedDoctor = null;
 
         searchInput.addEventListener('input', function() {
             const query = searchInput.value;
+            const specialty = specialtyFilter.value;
+            
             if (query.length > 0) {
-                fetch(`/autocomplete?q=${query}`)
+                fetch(`/autocomplete?q=${query}&specialty=${specialty}`)
                     .then(response => response.json())
                     .then(suggestions => {
                         suggestionsBox.innerHTML = '';
@@ -34,22 +46,25 @@
                             li.addEventListener('click', function() {
                                 searchInput.value = doctor.name;
                                 suggestionsBox.innerHTML = '';
-                                selectedDoctor = doctor; // Guardamos el médico seleccionado
-                                selectButton.disabled = false; // Habilitamos el botón
+                                selectedDoctor = doctor;
+                                selectButton.disabled = false;
                             });
                             suggestionsBox.appendChild(li);
                         });
                     });
             } else {
                 suggestionsBox.innerHTML = '';
-                selectedDoctor = null; // Reiniciamos la selección
-                selectButton.disabled = true; // Deshabilitamos el botón
+                selectedDoctor = null;
+                selectButton.disabled = true;
             }
+        });
+
+        specialtyFilter.addEventListener('change', function() {
+            searchInput.dispatchEvent(new Event('input'));  // Reejecutar la búsqueda cuando cambie el filtro
         });
 
         selectButton.addEventListener('click', function() {
             if (selectedDoctor) {
-                // Aquí puedes redirigir a la página de reserva
                 window.location.href = `/reserva?doctor=${encodeURIComponent(selectedDoctor.name)}`;
             } else {
                 alert("Médico no seleccionado");
