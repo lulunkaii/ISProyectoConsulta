@@ -10,6 +10,7 @@ def crear_base_de_datos():
         medico TEXT NOT NULL,
         usuario_rut TEXT NOT NULL,
         fecha TEXT NOT NULL,
+        motivo TEXT,
         estado TEXT NOT NULL
     )
     ''')
@@ -53,11 +54,11 @@ def crear_base_de_datos():
     conn.commit()
     conn.close()
 
-def ingresar_cita(medico, usuario, fecha):
+def ingresar_cita(medico, usuario, fecha, motivo):
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO citas VALUES(?, ?, ?, ?, ?)", id, medico, usuario, fecha, "false")
+    cursor.execute("INSERT INTO citas VALUES(?, ?, ?, ?, ?)", id, medico, usuario, fecha, motivo, "false")
     conn.commit()
     conn.close()
 
