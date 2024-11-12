@@ -1,54 +1,86 @@
 @import url('https://fonts.googleapis.com/css?family=Questrial&display=swap');
-/* Estilo general */
+
 * {
     box-sizing: border-box;
     font-family: 'Questrial', sans-serif;
     margin: 0;
     padding: 0;
-  }
-  
-  body {
+}
+
+body {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
     background-color: #f4f4f4;
-  }
-  
-  .form-container {
+}
+
+.form-container {
     background-color: #fff;
     padding: 2em;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
-  }
-  
-  .form-title {
+}
+
+.form-title {
     text-align: center;
     font-size: 1.5em;
     margin-bottom: 1em;
     color: #333;
-  }
-  
-  /* Estilos de los campos de entrada */
-  .form-group {
+}
+
+/* Estilos de los campos de entrada */
+.form-group {
     margin-bottom: 1.5em;
-  }
-  
-  .form-label {
+}
+
+.form-label {
     display: block;
     font-size: 1em;
     color: #555;
     margin-bottom: 0.5em;
-  }
-  
-  .form-input,
-  .form-textarea {
+}
+
+.form-input,
+.form-textarea {
     width: 100%;
     padding: 0.7rem 1rem;
     font-size: 1em;
     border: none;
     background-color: #f4f2f2;
-    color: #646464
-    }
+    color: #646464;
+}
+
+.form-button {
+    width: 100%;
+    padding: 0.7rem;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-button:hover {
+    background-color: #0056b3;
+}
+
+
+.form-subtext {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.form-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.form-link:hover {
+    text-decoration: underline;
+}
