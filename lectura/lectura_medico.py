@@ -4,21 +4,27 @@ import re
 '''
 Funciones para poder leer datos de un médico 
 '''
-def get_medico_id(id):
+def get_medico_id(id, conn=None):
     '''
     Devuelve un médico (todos sus datos) según su id
     '''
-    conn = sqlite3.connect('centro_medico.db')
+    if conn is None:
+        conn = sqlite3.connect('centro_medico.db')
+        close_conn = True
+    else:
+        close_conn = False
+
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM medicos WHERE id = ?", (id,))
     medico = cursor.fetchone()
-    conn.close()
+    
+    if close_conn:
+        conn.close()
     return medico
 
-def get_dato_medico_id(id, dato):
+def get_dato_medico_id(id, dato, conn=None):
     '''
-    Devuelve un dato específico de un médico según su id. Los datos válidos son: id, rut, nombre,
-    sexo, correo, especialidad, descripcion, estudios, ciudad
+    Devuelve un dato específico de un médico según su id.
     '''
     valid_datos = ['id', 'rut', 'nombre', 'sexo', 'correo', 'especialidad', 'descripcion', 'estudios', 'ciudad']
     
@@ -26,11 +32,18 @@ def get_dato_medico_id(id, dato):
         return {"error": "Dato no válido"}
 
     try:
-        conn = sqlite3.connect('centro_medico.db')
+        if conn is None:
+            conn = sqlite3.connect('centro_medico.db')
+            close_conn = True
+        else:
+            close_conn = False
+
         cursor = conn.cursor()
         cursor.execute(f"SELECT {dato} FROM medicos WHERE id = ?", (id,))
         medico = cursor.fetchone()
-        conn.close()
+        
+        if close_conn:
+            conn.close()
         
         if medico:
             return {dato: medico[0]}
@@ -44,58 +57,94 @@ def get_dato_medico_id(id, dato):
 Funciones para retornar todos los médicos según distintos criterios
 '''
 
-def get_medicos_rut(rut):
+def get_medicos_rut(rut, conn=None):
     '''
     Devuelve un médico según su rut. Evite usar esta función, ya que el rut no es un identificador único
+    a priori
     '''
-    conn = sqlite3.connect('centro_medico.db')
+    if conn is None:
+        conn = sqlite3.connect('centro_medico.db')
+        close_conn = True
+    else:
+        close_conn = False
+    
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM medicos WHERE rut = ?", (rut,))
     medico = cursor.fetchone()
-    conn.close()
+
+    if close_conn:
+        conn.close()
     return medico
 
-def get_medicos_nombre(nombre):
+def get_medicos_nombre(nombre, conn=None):
     '''
     Devuelve un médico según su nombre. Considere que esto puede devolver más de un médico
     '''
-    conn = sqlite3.connect('centro_medico.db')
+    if conn is None:
+        conn = sqlite3.connect('centro_medico.db')
+        close_conn = True
+    else:
+        close_conn = False
+
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM medicos WHERE nombre = ?", (nombre,))
     medico = cursor.fetchone()
-    conn.close()
+
+    if close_conn:
+        conn.close()
     return medico
 
-def get_medicos_especialidad(especialidad):
+def get_medicos_especialidad(especialidad, conn=None):
     '''
     Devuelve todos los médicos según su especialidad
     '''
-    conn = sqlite3.connect('centro_medico.db')
+    if conn is None:
+        conn = sqlite3.connect('centro_medico.db')
+        close_conn = True
+    else:
+        close_conn = False
+    
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM medicos WHERE especialidad = ?", (especialidad,))
     medicos = cursor.fetchall()
-    conn.close()
+
+    if close_conn:
+        conn.close()
     return medicos
 
-def get_medicos_ciudad(ciudad):
+def get_medicos_ciudad(ciudad, conn=None):
     '''
     Devuelve todos los médicos según su ciudad
     '''
-    conn = sqlite3.connect('centro_medico.db')
+    if conn is None:
+        conn = sqlite3.connect('centro_medico.db')
+        close_conn = True
+    else:
+        close_conn = False
+
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM medicos WHERE ciudad = ?", (ciudad,))
     medicos = cursor.fetchall()
-    conn.close()
+
+    if close_conn:
+        conn.close()
     return medicos
 
-def get_medicos_sexo(sexo):
+def get_medicos_sexo(sexo, conn=None):
     '''
     Devuelve todos los médicos según su sexo
     '''
-    conn = sqlite3.connect('centro_medico.db')
+    if conn is None:
+        conn = sqlite3.connect('centro_medico.db')
+        close_conn = True
+    else:
+        close_conn = False
+
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM medicos WHERE sexo = ?", (sexo,))
     medicos = cursor.fetchall()
-    conn.close()
+
+    if close_conn:
+        conn.close()
     return medicos
 
