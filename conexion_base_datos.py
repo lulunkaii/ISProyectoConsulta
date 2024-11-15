@@ -1,17 +1,16 @@
 import re
 import sqlite3
 
-# Funcion para crear la base de datos
-# Crea las tablas: citas, usuarios y medicos
+# Función para crear la base de datos
 def crear_base_de_datos():
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
 
-    # tabla citas
+    # Crear tabla citas
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS citas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        medico INTERGER NOT NULL,
+        medico INTEGER NOT NULL,
         usuario_rut TEXT NOT NULL,
         fecha TEXT NOT NULL,
         motivo TEXT,
@@ -19,37 +18,37 @@ def crear_base_de_datos():
     )
     ''')
 
-    # tabla usuarios
+    # Crear tabla usuarios
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS usuarios (
         rut INTEGER PRIMARY KEY,
         nombre TEXT NOT NULL,
         correo TEXT,
-        edad INTERGER NOT NULL,
-        numero_telefonico INTERGER NOT NULL
+        edad INTEGER NOT NULL,
+        numero_telefonico INTEGER NOT NULL
     )
     ''')
 
-    # tabla medicos
+    # Crear tabla medicos
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS medicos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        rut INTEGER NOT NULL,       
+        rut INTEGER NOT NULL,
         nombre TEXT NOT NULL,
         sexo TEXT,
         correo TEXT,
         especialidad TEXT NOT NULL,
-        descripcion TEXT,   
+        descripcion TEXT,
         estudios TEXT,
         ciudad TEXT
     )
     ''')
 
-    # tabla agendas
+    # Crear tabla agendas
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS agendas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        medico_id INTERGER NOT NULL,
+        medico_id INTEGER NOT NULL,
         fecha TEXT NOT NULL
     )
     ''')
@@ -57,24 +56,27 @@ def crear_base_de_datos():
     conn.commit()
     conn.close()
 
-
-# Funcion para ingresar una cita a la tabla citas
-# @param medico Id del medico
-# @param usuario_rut Rut del usuario
-# @param fecha Fecha de la cita
-# @param motivo Motivo de la cita
-
+# Función para ingresar una cita a la tabla citas
 def ingresar_cita(id_medico, usuario_rut, fecha, motivo):
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
 
-    rut_num = re.sub('[^0-9]','', usuario_rut) # elimina caracteres no numericos
-    fecha_str = str(fecha) 
-    
-    cursor.execute("INSERT INTO citas VALUES(NULL, ?, ?, ?, ?, ?)", (id_medico, rut_num, fecha_str, motivo, "false"))
+    rut_num = re.sub('[^0-9]', '', usuario_rut)  # Elimina caracteres no numéricos
+    fecha_str = str(fecha)
+
+    cursor.execute("INSERT INTO citas (medico, usuario_rut, fecha, motivo, estado) VALUES (?, ?, ?, ?, ?)", 
+                   (id_medico, rut_num, fecha_str, motivo, "false"))
 
     conn.commit()
     conn.close()
+
+# Función para obtener datos de la base de datos
+def fetch_data_from_db(table_name):
+    conn = sqlite3.connect('centro_medico.db')
+    cursor = conn.cursor()
+    data = cursor.execute(f"SELECT * FROM {table_name}").fetchall()
+    conn.close()
+    return data
 
 # Funcion para ingresar un usuario a la tabla usuarios
 # @param id Id del usuario
