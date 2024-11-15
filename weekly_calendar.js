@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
             // Formatear la fecha en el formato YYYY-MM-DD
             const formattedDate = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-            fetch(`http://127.0.0.1:5000/obtener_horas_ocupadas?fecha=${formattedDate}`)
-                .then(response => response.json())
+            fetch(`http://127.0.0.1:5000/obtener_horas_ocupadas?fecha=${formattedDate}`) // Obtener las citas agendadas para la fecha especificada (Reemplazar la URL con la correcta)
+                .then(response => response.json()) // Convertir la respuesta a JSON
                 .then(agendadas => {
                     const citasFomateadas = formatAppointments(agendadas);
                     generateAppointmentsList(citasFomateadas);
@@ -50,8 +50,10 @@ function getMonthIndex(monthName) {
     return months.indexOf(monthName.toLowerCase());
 }
 
+// Lista de citas agendadas
 const agendadas = []
 
+// Generar la lista de citas agendadas
 function generateAppointmentsList(citasFomateadas) {
     citasFomateadas.forEach((cita) => {
         agendadas.push(cita);
