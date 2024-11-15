@@ -1,68 +1,269 @@
+/* Establecemos una fuente más moderna y estilizada */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fa;
     margin: 0;
     padding: 0;
 }
 
+/* Contenedor centrado con sombra suave */
 .container {
     width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
+/* Encabezado principal con un color más suave */
 h1 {
-    color: #333;
+    color: #5b5b5b;
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
+/* Contenedor de búsqueda con estilo y sombra */
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Estilo de entrada más elegante */
+input[type="text"] {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus {
+    border-color: #4caf50; /* Color de borde en foco */
+    outline: none;
+}
+
+/* Filtro de especialidad con un diseño más limpio */
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease-in-out;
+}
+
+/* Personalización de las opciones del select */
+select option:hover {
+    background-color: #f4f4f4; /* Cambiar color de fondo al pasar el ratón */
+    color: #333; /* Cambiar color de texto */
+}
+
+select option:checked {
+    background-color: #4caf50; /* Color verde cuando se selecciona */
+    color: white; /* Texto blanco para resaltar */
+}
+
+/* Estilo cuando el select tiene foco */
+select:focus {
+    border-color: #4caf50; /* Color de borde en foco */
+    outline: none;
+}
+
+/* Asegurarnos de que el contenedor tiene position: relative */
 .search-container {
     position: relative;
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
+/* Estilo de la lista de sugerencias */
 ul {
     list-style-type: none;
-    padding: 0;
+    padding: 0; /* Corregir el padding */
     margin: 0;
     position: absolute;
     width: 100%;
+    max-height: 200px; /* Limitar la altura para hacerla desplazable */
+    overflow-y: auto; /* Permitir desplazamiento si hay muchas sugerencias */
     border: 1px solid #ddd;
     background-color: white;
-    z-index: 1000;
+    border-radius: 8px;
+    z-index: 1000; /* Asegurarnos de que esté por encima de otros elementos */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none; /* Inicialmente no visible */
+    top: 25%; /* Aparece justo debajo del campo de texto */
+    left: 0;
+    margin-top: 5px; /* Espacio entre el campo de texto y las sugerencias */
 }
 
+ul.show {
+    display: block; /* Mostrar la lista cuando haya sugerencias */
+}
+
+/* Estilo de cada elemento de la lista */
 li {
-    padding: 10px;
+    padding: 12px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 li:hover {
-    background-color: #f0f0f0;
+    background-color: #f4f4f4;
 }
 
+/* Estilo del botón con animación */
 button {
-    padding: 10px 15px;
+    padding: 12px 20px;
     font-size: 16px;
     border: none;
-    border-radius: 4px;
-    background-color: #5cb85c;
+    border-radius: 8px;
+    background-color: #4caf50;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s ease-in-out;
+    width: 100%;
+    margin-top: 15px;
 }
 
 button:hover {
-    background-color: #4cae4c;
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+button:disabled {
+    background-color: #bdbdbd;
+    cursor: not-allowed;
+}
+
+/* Mejora de la apariencia de los inputs en móviles */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    input[type="text"], select, button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+}
+
+/* Animación de aparición */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* Desactivar el color azul predeterminado en los navegadores */
+select {
+    -webkit-appearance: none; /* Para navegadores basados en Webkit (Chrome, Safari) */
+    appearance: none; /* Para navegadores modernos (Firefox, Edge) */
+    background-color: #fff; /* Asegúrate de que el fondo sea blanco */
+}
+
+/* Opcional: eliminar la flecha por defecto del select */
+select::-webkit-appearance {
+    background-image: none;
+}
+
+/* Modo Oscuro */
+.dark-mode {
+    background-color: #121212; /* Fondo oscuro en toda la página */
+    color: #e0e0e0; /* Texto claro */
+}
+
+/* El contenedor sigue con fondo claro en modo oscuro */
+.container {
+    background-color: #fff; /* Mantén fondo blanco para los contenedores */
+}
+
+/* Estilo del botón de ampolleta */
+.mode-toggle {
+    background: none; /* Elimina el fondo */
+    border: none; /* Elimina el borde */
+    font-size: 24px;
+    color: #f39c12; /* Color de la ampolleta */
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    transition: color 0.3s; /* Solo cambia el color */
+}
+
+
+/* Cambio de color del botón de ampolleta en modo oscuro */
+.dark-mode .mode-toggle {
+    color: #f1c40f; /* Color del ícono en modo oscuro */
+}
+
+.mode-toggle:hover {
+    color: #f1c40f;
+    background-color: transparent; /* Asegúrate de que el fondo no cambie al pasar el mouse */
+}
+
+/* Estilo para el spinner */
+.spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1);  /* Fondo completamente negro */
+    display: flex;  /* Asegura que los elementos se alineen en el centro */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;  /* Para alinear el mensaje debajo del spinner */
+    z-index: 9999;
+    opacity: 1;  /* Inicialmente visible */
+    transition: opacity 1s ease-out;  /* Transición suave */
+}
+
+/* Estilo para el spinner de carga */
+.loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+/* Animación de rotación */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estilo para el mensaje debajo del spinner */
+#loadingMessage {
+    color: #fff;  /* Texto blanco */
+    margin-top: 15px;  /* Espacio entre el spinner y el mensaje */
+    font-size: 18px;  /* Tamaño de fuente */
+    font-weight: bold;  /* Hacer el texto en negrita */
+}
+
+/* Estilo para la pantalla de búsqueda (oculta inicialmente) */
+.search-screen {
+    display: none;  /* Inicialmente oculta */
+    opacity: 0;
+    transition: opacity 1s ease-in;  /* Transición suave para aparecer */
 }

@@ -4,78 +4,39 @@
     <meta charset="UTF-8">
     <title>Búsqueda de Doctores</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
+    <div id="loadingSpinner" class="spinner">
+        <div class="loader"></div>
+        <p id="loadingMessage">Cargando doctores...</p>
+    </div>
+    
+
+    <button id="dark-mode-toggle" class="mode-toggle">
+        <i class="fas fa-sun" id="light-icon"></i> <!-- Ícono de sol -->
+        <i class="fas fa-moon" id="dark-icon" style="display:none;"></i> <!-- Ícono de luna -->
+    </button>   
+    
     <div class="container">
         <h1>Búsqueda de Doctores</h1>
         <div class="search-container">
-            <input type="text" id="search" placeholder="Escribe el nombre del doctor" autocomplete="off">
             
             <!-- Filtro por especialidad -->
             <select id="specialtyFilter">
                 <option value="">Seleccionar especialidad</option>
-                <option value="Cardiología">Cardiología</option>
-                <option value="Pediatría">Pediatría</option>
-                <option value="Neurología">Neurología</option>
             </select>
 
-            <ul id="suggestions"></ul>
+            <!-- Lista de doctores -->
+            <select id="doctorSelect" disabled>
+                <option value="">Selecciona un doctor</option>
+            </select>
+
             <button id="selectButton" disabled>Seleccionar</button>
         </div>
     </div>
 
-    <script>
-        const searchInput = document.getElementById('search');
-        const specialtyFilter = document.getElementById('specialtyFilter');
-        const suggestionsBox = document.getElementById('suggestions');
-        const selectButton = document.getElementById('selectButton');
-        let selectedDoctor = null;
-
-        searchInput.addEventListener('input', function() {
-            const query = searchInput.value;
-            const specialty = specialtyFilter.value;
-            
-            if (query.length > 0) {
-                fetch(`/autocomplete?q=${query}&specialty=${specialty}`)
-                    .then(response => response.json())
-                    .then(suggestions => {
-                        suggestionsBox.innerHTML = '';
-                        suggestions.forEach(doctor => {
-                            const li = document.createElement('li');
-                            li.textContent = `${doctor.name} (${doctor.specialty})`;
-                            li.addEventListener('click', function() {
-                                searchInput.value = doctor.name;
-                                suggestionsBox.innerHTML = '';
-                                selectedDoctor = doctor;
-                                selectButton.disabled = false;
-                            });
-                            suggestionsBox.appendChild(li);
-                        });
-                    });
-            } else {
-                suggestionsBox.innerHTML = '';
-                selectedDoctor = null;
-                selectButton.disabled = true;
-            }
-        });
-
-        specialtyFilter.addEventListener('change', function() {
-            searchInput.dispatchEvent(new Event('input'));  // Reejecutar la búsqueda cuando cambie el filtro
-        });
-
-        selectButton.addEventListener('click', function() {
-            if (selectedDoctor) {
-                window.location.href = `/reserva?doctor=${encodeURIComponent(selectedDoctor.name)}`;
-            } else {
-                alert("Médico no seleccionado");
-            }
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
-                suggestionsBox.innerHTML = '';
-            }
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
