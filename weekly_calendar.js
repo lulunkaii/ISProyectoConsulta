@@ -10,14 +10,39 @@ document.addEventListener("DOMContentLoaded", function () {
         const year = parseInt(urlParams.get('ano'), 10);
 
         if (day && month && year) {
-            // Muestra el título con el día, mes y año seleccionados
             document.getElementById("calendarTitle").innerText = `Calendario de la Semana del ${day} de ${month}`;
-            generateWeeklyCalendar(day, month, year);
+
+            // Convertir el nombre del mes a su índice numérico
+            const monthIndex = getMonthIndex(month);
+            if (monthIndex === -1) {
+                document.getElementById("calendarContainer").innerText = "Mes inválido.";
+                return;
+            }
+
+            // Formatear la fecha en el formato YYYY-MM-DD
+            const formattedDate = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            fetch(`http://127.0.0.1:5000/obtener_horas_ocupadas?fecha=${formattedDate}`)
+                .then(response => response.json())
+                .then(agendadas => {
+                    const citasFomateadas = formatAppointments(agendadas);
+                    generateAppointmentsList(citasFomateadas);
+                    generateWeeklyCalendar(day, month, year);
+                })
+                .catch(error => console.error("Error al obtener las citas:", error));
         } else {
             document.getElementById("calendarContainer").innerText = "No se ha especificado un día, mes o año.";
         }
     }
 });
+
+// Procesar citas agendadas para formatearlas correctamente
+function formatAppointments(appointments) {
+    return appointments.map(item => ({
+        fecha: item['fecha'],
+        hora: parseInt(item['hora'], 10)
+    }));
+}
 
 // Función para convertir el nombre del mes en español a su índice (0 para enero, 11 para diciembre).
 function getMonthIndex(monthName) {
@@ -25,16 +50,19 @@ function getMonthIndex(monthName) {
     return months.indexOf(monthName.toLowerCase());
 }
 
-// Lista de horas y fechas agendadas (Para probar)
-const agendadas = [
-    { fecha: '2024-11-08', hora: 8 },
-    { fecha: '2024-11-08', hora: 9 },
-];
+const agendadas = []
+
+function generateAppointmentsList(citasFomateadas) {
+    citasFomateadas.forEach((cita) => {
+        agendadas.push(cita);
+    });
+}
+
 
 // Lista de horas y fechas en proceso (Para probar)
 const en_proceso = [
-    { fecha: '2024-11-08', hora: 10 },
-    { fecha: '2024-11-08', hora: 11 },
+    { fecha: '2024-11-16', hora: 10 },
+    { fecha: '2024-11-16', hora: 11 },
 ];
 
 // Función para generar el calendario semanal basado en el día, mes y año proporcionados.
@@ -59,7 +87,6 @@ function generateWeeklyCalendar(day, month, year) {
 
     // Inicializa la matriz de selección
     var selectionMatrix = Array.from({ length: hoursOfDay.length }, () => Array(daysOfWeek.length).fill(0));
-    console.log("Matriz de selección inicializada:", selectionMatrix);
 
     // Crea la estructura de la tabla del calendario
     const table = document.createElement("table");
@@ -112,7 +139,7 @@ function generateWeeklyCalendar(day, month, year) {
             // Configuración del botón para mostrar si está agendado o no
             if (isAgendada || isEnProceso || currentDateTime < now) {
                 if (isAgendada) {
-                    button.classList.add("selected"); // Añade la clase de seleccionado
+                    button.classList.add("agendada"); // Añade la clase de agendado
                     button.style.backgroundColor = "red"; // Añade el fondo rojo
                 } else if (isEnProceso) {
                     button.classList.add("in-process"); // Añade la clase de en proceso
@@ -129,12 +156,11 @@ function generateWeeklyCalendar(day, month, year) {
 
             // Configuración del botón para seleccionarlo al hacer clic
             button.className = "hour-button";
+            button.dataset.fecha = `${formattedDate}T${hour.toString().padStart(2, '0')}:00:00`;
             button.onclick = function() {
                 if (!this.disabled) {
-                    this.classList.add("selected");
-                    this.disabled = true;
+                    this.classList.add("in_process");
                     selectionMatrix[hourIndex][dayIndex] = 1;
-                    console.log("Matriz de selección actualizada:", selectionMatrix);
                     // Redirigir a la página de formulario con la fecha y hora seleccionadas
                     window.location.href = `form.html?fechaCita=${encodeURIComponent(formattedDate + 'T' + hour + ':00')}`;
                 }
@@ -162,11 +188,9 @@ window.onload = function() {
 
         if (day && month && year) {
             document.getElementById("calendarTitle").innerText = `Calendario de la Semana del ${day} de ${month}`;
-            console.log(`Generando calendario semanal para el día ${day}, mes ${month}, año ${year}`);
             generateWeeklyCalendar(day, month, year);
         } else {
             document.getElementById("calendarContainer").innerText = "No se ha especificado un día, mes o año.";
-            console.log("No se ha especificado un día, mes o año.");
         }
     }
 }

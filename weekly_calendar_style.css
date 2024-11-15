@@ -61,8 +61,3 @@ body {
 .date-button:hover, .hour-button:hover {
     background-color: gray; /* Fondo gris oscuro */
 }
-
-/* Estilo de los botones seleccionados */
-.selected {
-    background-color: orange; /* Fondo rojo */
-}
