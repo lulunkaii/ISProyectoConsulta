@@ -154,9 +154,15 @@ def modificar_medico(rut, nombre, sexo, correo, especialidad, descripcion, estud
     conn.commit()
     conn.close()
 
-# revisar
+# Por verificar
 def eliminar_cita(medico, usuario_rut, fecha):
-    pass
+    conn = sqlite3.connect('centro_medico.db')
+    cursor = conn.cursor()
+
+    rut_num = re.sub('[^0-9]','', usuario_rut)
+    cursor.execute("DELETE FROM citas WHERE usuario_rut = ? AND medico = ? AND fecha = ?", (rut_num, medico, fecha))
+    conn.commit()
+    conn.close()
 
 def eliminar_usuario(rut):
     pass

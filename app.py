@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from datetime import datetime, timedelta
 from html_interface import CentroMedicoInterface
-from conexion_base_datos import ingresar_cita
+from conexion_base_datos import ingresar_cita, ingresar_hora_agenda, eliminar_cita, ingresar_medico
 
 app = Flask(__name__) # Crear la aplicación Flask
 CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}}) # Permitir CORS (Reemplazar con la URL de la aplicación web)
@@ -27,6 +27,27 @@ def obtener_horas_ocupadas():
 
     return jsonify(horas_filtradas) # Devolver las horas ocupadas en la semana
 
+# Por verificar
+@app.route('/obtener_agenda_medico', methods=['GET']) # Endpoint para obtener la agenda de un médico
+def obtener_agenda_medico():
+    id_medico = request.args.get('id_medico') # Obtener el ID del médico de la solicitud
+
+    fecha = request.args.get('fecha') # Obtener la fecha de la solicitud
+
+    # Convertir la fecha solicitada a un objeto datetime
+    fecha_datetime = datetime.strptime(fecha, '%Y-%m-%d')
+
+    # Calcular el inicio y el fin de la semana
+    start_of_week = fecha_datetime - timedelta(days=fecha_datetime.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+
+    agenda_medico = centro_medico.obtener_agenda_medico(id_medico) # Obtener la agenda del médico
+
+    # Filtrar las horas de la agenda dentro del rango de la semana
+    agenda_filtrada = [hora for hora in agenda_medico if start_of_week <= datetime.strptime(hora['fecha'], '%Y-%m-%d') <= end_of_week]
+
+    return jsonify(agenda_filtrada) # Devolver la agenda del médico en la semana
+
 @app.route('/ingresar_cita', methods=['POST']) # Endpoint para ingresar una cita
 def ingresar_cita_endpoint():
     try:
@@ -38,6 +59,56 @@ def ingresar_cita_endpoint():
         
         # Llama a la función para ingresar la cita
         ingresar_cita(id_medico, usuario_rut, fecha, motivo)        
+        return jsonify({'status': 'success'}), 200 # Devuelve un mensaje de éxito
+    except Exception as e: # Manejar errores
+        print("Error:", e)
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+    
+# Por verificar
+@app.route('/cancelar_cita', methods=['POST']) # Endpoint para cancelar una cita
+def cancelar_cita_endpoint():
+    try:
+        data = request.get_json() # Obtener los datos de la solicitud
+        id_cita = data['id_cita']
+        
+        # Llama a la función para cancelar la cita
+        eliminar_cita(id_cita)        
+        return jsonify({'status': 'success'}), 200 # Devuelve un mensaje de éxito
+    except Exception as e: # Manejar errores
+        print("Error:", e)
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+    
+# Por verificar
+@app.route('/ingresar_agenda', methods=['POST']) # Endpoint para ingresar una agenda
+def ingresar_agenda_endpoint():
+    try:
+        data = request.get_json() # Obtener los datos de la solicitud
+        id_medico = data['id_medico']
+        fecha = data['fecha']
+        
+        # Llama a la función para ingresar la agenda
+        ingresar_hora_agenda(id_medico, fecha)        
+        return jsonify({'status': 'success'}), 200 # Devuelve un mensaje de éxito
+    except Exception as e: # Manejar errores
+        print("Error:", e)
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+    
+# Por verificar
+@app.route('/ingresar_medico', methods=['POST']) # Endpoint para ingresar un médico
+def ingresar_medico_endpoint():
+    try:
+        data = request.get_json() # Obtener los datos de la solicitud
+        rut = data['rut']
+        nombre = data['nombre']
+        sexo = data['sexo']
+        correo = data['correo']
+        especialidad = data['especialidad']
+        descripcion = data['descripcion']
+        estudios = data['estudios']
+        ciudad = data['ciudad']
+        
+        # Llama a la función para ingresar el médico
+        ingresar_medico(rut, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad)        
         return jsonify({'status': 'success'}), 200 # Devuelve un mensaje de éxito
     except Exception as e: # Manejar errores
         print("Error:", e)
