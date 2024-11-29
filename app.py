@@ -48,6 +48,13 @@ def obtener_agenda_medico():
 
     return jsonify(agenda_filtrada) # Devolver la agenda del médico en la semana
 
+# Por verificar
+@app.route('/obtener_medicos', methods=['GET']) # Endpoint para obtener la lista de médicos
+def obtener_medicos():
+    medicos = centro_medico.obtener_medicos() # Obtener la lista de médicos
+
+    return jsonify(medicos) # Devolver la lista de médicos
+
 @app.route('/ingresar_cita', methods=['POST']) # Endpoint para ingresar una cita
 def ingresar_cita_endpoint():
     try:
@@ -98,6 +105,7 @@ def ingresar_agenda_endpoint():
 def ingresar_medico_endpoint():
     try:
         data = request.get_json() # Obtener los datos de la solicitud
+        id = data['id']
         rut = data['rut']
         nombre = data['nombre']
         sexo = data['sexo']
@@ -106,9 +114,10 @@ def ingresar_medico_endpoint():
         descripcion = data['descripcion']
         estudios = data['estudios']
         ciudad = data['ciudad']
+        telefono = data['telefono']
         
         # Llama a la función para ingresar el médico
-        ingresar_medico(rut, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad)        
+        ingresar_medico(id, rut, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad, telefono)        
         return jsonify({'status': 'success'}), 200 # Devuelve un mensaje de éxito
     except Exception as e: # Manejar errores
         print("Error:", e)

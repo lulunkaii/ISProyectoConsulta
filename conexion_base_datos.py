@@ -40,7 +40,8 @@ def crear_base_de_datos():
         especialidad TEXT NOT NULL,
         descripcion TEXT,
         estudios TEXT,
-        ciudad TEXT
+        ciudad TEXT,
+        telefono INTEGER
     )
     ''')
 

@@ -41,3 +41,33 @@ class CentroMedicoInterface:
                     agenda_medico.append({"fecha": fecha_part, "hora": hora_part}) # Agregar a la lista
             except (IndexError, ValueError) as e: # Manejar errores de formato
                 print(f"Error al procesar la fecha '{fecha}': {e}")
+
+        # Devolver la lista de diccionarios directamente
+        return agenda_medico
+    
+    # Por verificar
+    def obtener_medicos(self):
+        # Obtener la lista de médicos desde la base de datos y formatearla
+        medicos = fetch_data_from_db("medicos")
+        medicos_list = []
+        
+        for row in medicos:
+            try:
+                id_medico = row[0]
+                rut = row[1]
+                nombre = row[2]
+                sexo = row[3]
+                correo = row[4]
+                especialidad = row[5]
+                descripcion = row[6]
+                estudios = row[7]
+                ciudad = row[8]
+                telefono = row[9]
+                medicos_list.append({"id": id_medico, "rut": rut, "nombre": nombre, "sexo": sexo, "correo": correo, 
+                                     "especialidad": especialidad, "descripcion": descripcion, "estudios": estudios, 
+                                     "ciudad": ciudad, "telefono": telefono}) # Agregar a la lista
+            except (IndexError, ValueError) as e: # Manejar errores de formato
+                print(f"Error al procesar el médico '{row}': {e}")
+        
+        # Devolver la lista de diccionarios directamente
+        return medicos_list
