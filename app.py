@@ -1,12 +1,13 @@
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from datetime import datetime, timedelta
 from html_interface import CentroMedicoInterface
 from conexion_base_datos import ingresar_cita
 
+
 app = Flask(__name__) # Crear la aplicación Flask
-CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}}) # Permitir CORS (Reemplazar con la URL de la aplicación web)
+CORS(app, resources={r"/*": {"origins": "*"}}) # Permitir CORS (Reemplazar con la URL de la aplicación web)
 
 centro_medico = CentroMedicoInterface()
 
@@ -41,7 +42,12 @@ doctors = [
 ]
 
 
-@app.route('/doctors', methods=['GET'])
+@app.route('/buscar', methods=['GET', 'POST']) # Endpoint para buscar doctores
+def index():
+    return render_template('buscador.html')
+
+
+@app.route('/doctors', methods=['GET', 'POST']) # Endpoint para obtener los doctores
 def get_doctors():
     specialty = request.args.get('specialty', '')
     
@@ -53,6 +59,17 @@ def get_doctors():
         filtered_doctors = doctors
         
     return jsonify(filtered_doctors)
+
+# @app.route('/reserva?medico=<int:doctor_id>', methods=['GET']) # Endpoint para obtener un doctor específico
+@app.route('/reserva?medico', methods=['GET']) # Endpoint para obtener un doctor específico
+def doctor_calendar(doctor_id):
+    id = request.args.get('id') # Obtener id de medico
+    
+    doctor = centro_medico.obtener_doctor_por_id(id) # Obtener el doctor por id
+    if id is None:
+        return jsonify({'error': 'ID inválido'}), 400
+    else:
+        return render_template("medico.html") # Renderizar la plantilla de doctor
 
 
 @app.route('/obtener_horas_ocupadas', methods=['GET']) # Endpoint para obtener las horas ocupadas
@@ -84,7 +101,7 @@ def ingresar_cita_endpoint():
         
         # Llama a la función para ingresar la cita
         ingresar_cita(id_medico, usuario_rut, fecha, motivo)       
-         
+
         return jsonify({'status': 'success'}), 200 # Devuelve un mensaje de éxito
     except Exception as e: # Manejar errores
         print("Error:", e)

@@ -77,8 +77,35 @@ doctorSelect.addEventListener('change', function() {
 });
 
 selectButton.addEventListener('click', function() {
-    if (selectedDoctor) {
-        window.location.href = `/reserva?doctor=${encodeURIComponent(selectedDoctor)}`;
+
+    if (selectedDoctor && selectedDoctor.id) {  // Check if a doctor is selected and has an id
+        data = {    
+            id: selectedDoctor.id  // Use the selected doctor's id
+        };
+        // window.location.href = `/reserva?medico=${encodeURIComponent(selectedDoctor[0])}`;
+    //    window.location.href = `/reserva?medico`;
+        
+        fetch('http://127.0.0.1:5000/reserva?medico', {  // Hay que asegurarse de establecer la dirección correcta
+            method: 'POST', // Método de la solicitud
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })       
+        .then(response => response.json())
+        .then(result => { // Maneja la respuesta del backend
+
+            if (result.status === 'success') {
+                window.location.href = `reserva?medico=${encodeURIComponent(selectedDoctor.id)}`;
+            } else { // Maneja el error si la solicitud no se completó correctamente
+                alert('Error al buscar medico');
+            }
+        })
+        .catch(error => { // Captura cualquier error
+            console.error('Error:', error);
+            alert('Error al buscar medico');
+        });
+
     } else {
         alert("Médico no seleccionado");
     }
