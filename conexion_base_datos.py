@@ -70,13 +70,6 @@ def ingresar_cita(id_medico, usuario_rut, fecha, motivo):
     conn.commit()
     conn.close()
 
-# Función para obtener datos de la base de datos
-def fetch_data_from_db(table_name):
-    conn = sqlite3.connect('centro_medico.db')
-    cursor = conn.cursor()
-    data = cursor.execute(f"SELECT * FROM {table_name}").fetchall()
-    conn.close()
-    return data
 
 # Funcion para ingresar un usuario a la tabla usuarios
 # @param id Id del usuario

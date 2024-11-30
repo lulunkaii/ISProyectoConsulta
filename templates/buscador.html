@@ -13,11 +13,6 @@
         <p id="loadingMessage">Cargando doctores...</p>
     </div>
     
-
-    <button id="dark-mode-toggle" class="mode-toggle">
-        <i class="fas fa-sun" id="light-icon"></i> <!-- Ícono de sol -->
-        <i class="fas fa-moon" id="dark-icon" style="display:none;"></i> <!-- Ícono de luna -->
-    </button>   
     
     <div class="wrapper-container">
             <h1>Búsqueda de Doctores</h1>
@@ -28,7 +23,7 @@
                     <button class="filter-bar" id="clearFiltersButton">Limpiar filtros</button>
                 
                     <!-- Filtro por especialidad -->
-                    <select class="filter-bar" id="specialtyFilter">
+                    <select class="filter-bar" id="especialidadFilter">
                         <option value="">Especialidad</option>
                     </select>
 
@@ -70,15 +65,16 @@
                         <!-- nombre del doctor-->
                         <h4 class="nombre-medico"><strong>Michael Deo</strong></h4>
                             <h5 class="especialidad-medico"><i> Cardiologo </i></h5>
-                           
+                            <p><i class="fas fa-${sexo}"></i></p>
                         <table>
+                            
                             <tr>
                                 <td><i class="fas fa-map-marker-alt"></i></td>
-                                <td>795 Folsom Ave, Suite 600 San Francisco, CADGE 94107</td>
+                                <td>Concepción</td>
                             </tr>
                             <tr>
                                 <td><i class="fas fa-phone"></i></td>
-                                <td>+1 123 456 7890</td>
+                                <td>+56 9 2123 4526 7890</td>
                             </tr>
                             <tr>
                                 <td><i class="fas fa-envelope"></i></td>
@@ -91,12 +87,11 @@
                     </div>     
                     
                     <div class="element informacion">
-                        <label class="titulo_info">Área</label>
-                        <p class="area-medico">795 Folsom Ave, Suite 600 San Francisco, CADGE 94107</p>
+                        
                         <label class="titulo_info">Convenio</label>
                         <p class="convenio-medico">Isapre Banmedica</p>
-                        <label class="titulo_info">Valor</label>
-                        <p class="valor-medico">$30.000</p>
+                        <label class="titulo_info">Descripcion</label>
+                        <p class="descropcion-medico">Amplia experiencia con pacientes mayores a 60 años de edad con cuadro complejo. 20 años practicando medicina.</p>
                         <label class="titulo_info">Estudios</label>
                         <p class="estudios-medico">Universidad de Concepción</p>
                     </div>

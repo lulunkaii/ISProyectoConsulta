@@ -1,151 +1,3 @@
-const specialtyFilter = document.getElementById('specialtyFilter');
-const doctorSelect = document.getElementById('doctorSelect');
-const selectButton = document.getElementById('selectButton');
-let selectedDoctor = null;
-
-// Función para cargar todas las especialidades únicas
-function loadSpecialties(doctors) {
-    const specialties = new Set(doctors.map(doctor => doctor.specialty)); 
-    specialties.forEach(specialty => {
-        const option = document.createElement('option');
-        option.value = specialty;
-        option.textContent = specialty;
-        specialtyFilter.appendChild(option);
-    });
-    
-}
-
-
-// Función para cargar los doctores
-function loadDoctors(doctors) {
-    doctorSelect.innerHTML = '<option value="">Selecciona un doctor</option>'; // Limpiamos las opciones
-    doctors.forEach(doctor => {
-        const option = document.createElement('option');
-        option.value = doctor.id;
-        option.textContent = `${doctor.name} (${doctor.specialty})`;
-        doctorSelect.appendChild(option);
-    });
-    doctorSelect.disabled = false;
-}
-
-// Cargar doctores y especialidades al cargar la página
-fetch('/doctors')
-    .then(response => response.json())
-    .then(doctors => {
-        loadSpecialties(doctors); // Cargamos las especialidades
-        loadDoctors(doctors); // Cargamos los doctores
-    })
-    .catch(error => {
-        console.error('Error al cargar los doctores:', error);
-        doctorSelect.disabled = true;
-    });
-
-specialtyFilter.addEventListener('change', function() {
-    const specialty = specialtyFilter.value;
-
-    if (!specialty) {
-        // Si no hay especialidad seleccionada, mostramos todos los doctores
-        fetch('/doctors')
-            .then(response => response.json())
-            .then(doctors => {
-                loadDoctors(doctors); // Cargamos todos los doctores
-            })
-            .catch(error => {
-                console.error('Error al cargar los doctores:', error);
-                doctorSelect.disabled = true;
-            });
-        return;
-    }
-
-    // Si hay especialidad seleccionada, filtramos los doctores
-    fetch(`/doctors?specialty=${specialty}`)
-        .then(response => response.json())
-        .then(filteredDoctors => {
-            loadDoctors(filteredDoctors); // Cargamos los doctores filtrados
-        })
-        .catch(error => {
-            console.error('Error al cargar los doctores:', error);
-            doctorSelect.disabled = true;
-        });
-});
-
-// Habilitamos el botón de selección cuando se elija un doctor
-doctorSelect.addEventListener('change', function() {
-    const selectedOption = doctorSelect.selectedOptions[0];
-    selectedDoctor = selectedOption ? selectedOption.textContent : null;
-    selectButton.disabled = !selectedDoctor;
-});
-
-selectButton.addEventListener('click', function() {
-
-    if (selectedDoctor && selectedDoctor.id) {  // Check if a doctor is selected and has an id
-        data = {    
-            id: selectedDoctor.id  // Use the selected doctor's id
-        };
-        // window.location.href = `/reserva?medico=${encodeURIComponent(selectedDoctor[0])}`;
-    //    window.location.href = `/reserva?medico`;
-        
-        fetch('http://127.0.0.1:5000/reserva?medico', {  // Hay que asegurarse de establecer la dirección correcta
-            method: 'POST', // Método de la solicitud
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })       
-        .then(response => response.json())
-        .then(result => { // Maneja la respuesta del backend
-
-            if (result.status === 'success') {
-                window.location.href = `reserva?medico=${encodeURIComponent(selectedDoctor.id)}`;
-            } else { // Maneja el error si la solicitud no se completó correctamente
-                alert('Error al buscar medico');
-            }
-        })
-        .catch(error => { // Captura cualquier error
-            console.error('Error:', error);
-            alert('Error al buscar medico');
-        });
-
-    } else {
-        alert("Médico no seleccionado");
-    }
-});
-
-// Obtenemos el botón y los íconos
-const toggleButton = document.getElementById('dark-mode-toggle');
-const lightIcon = document.getElementById('light-icon');
-const darkIcon = document.getElementById('dark-icon');
-
-// Función para alternar el modo oscuro
-toggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode'); // Alterna la clase dark-mode
-    
-    // Alternar los íconos
-    if (document.body.classList.contains('dark-mode')) {
-        darkIcon.style.display = 'inline';
-        lightIcon.style.display = 'none';
-    } else {
-        darkIcon.style.display = 'none';
-        lightIcon.style.display = 'inline';
-    }
-});
-
-// Verificar el modo oscuro almacenado en localStorage (opcional)
-if (localStorage.getItem('dark-mode') === 'enabled') {
-    document.body.classList.add('dark-mode');
-    darkIcon.style.display = 'inline';
-    lightIcon.style.display = 'none';
-}
-
-// Guardar el estado del modo oscuro en localStorage
-toggleButton.addEventListener('click', () => {
-    if (document.body.classList.contains('dark-mode')) {
-        localStorage.setItem('dark-mode', 'enabled');
-    } else {
-        localStorage.setItem('dark-mode', 'disabled');
-    }
-});
-
 window.onload = function() {
     // Muestra el spinner cuando la página cargue
     const spinner = document.querySelector('.spinner');
@@ -164,7 +16,129 @@ window.onload = function() {
             // Muestra la pantalla de búsqueda con desvanecimiento
             searchScreen.style.display = 'block';
             searchScreen.style.opacity = 1;
-        }, 500);  // El tiempo de la transición del spinner
+        }, 400);  // El tiempo de la transición del spinner
     }, 2000);  // Tiempo de carga (2 segundos)
 };
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Cargar filtros
+    fetch('/get_filters')
+        .then(response => response.json())
+        .then(data => {
+            // Llenar los filtros con los datos obtenidos
+            const especialidadFilter = document.getElementById('especialidadFilter');
+            const areaFilter = document.getElementById('areaFilter');
+            const convenioFilter = document.getElementById('convenioFilter');
+            
+            // Llenar especialidades
+            data.especialidades.forEach(especialidad => {
+                const option = document.createElement('option');
+                option.value = especialidad;
+                option.textContent = especialidad;
+                especialidadFilter.appendChild(option);
+            });
+            
+            // Llenar áreas
+            data.areas.forEach(area => {
+                const option = document.createElement('option');
+                option.value = area;
+                option.textContent = area;
+                areaFilter.appendChild(option);
+            });
+
+            // Llenar convenios
+            data.convenios.forEach(convenio => {
+                const option = document.createElement('option');
+                option.value = convenio;
+                option.textContent = convenio;
+                convenioFilter.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error al cargar filtros:', error));
+
+    // Escuchar cambios en los filtros para buscar doctores
+    document.querySelectorAll('.filter-bar').forEach(element => {
+        element.addEventListener('change', searchDoctors);
+        console.log('Escuchando cambios en los filtros');
+    });
+
+    document.getElementById('searchInput').addEventListener('input', searchDoctors);
+});
+
+function searchDoctors() {
+    const especialidad = document.getElementById('especialidadFilter').value;
+    const area = document.getElementById('areaFilter').value;
+    const convenio = document.getElementById('convenioFilter').value;
+    const name = document.getElementById('searchInput').value;
+
+    const url = `/obtener_medicos?especialidad=${especialidad}&area=${area}&convenio=${convenio}&name=${name}`;
+    
+    fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al obtener medicos');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Respuesta del servidor:', data); // Añadido para inspeccionar los datos
+          // Asegúrate de que data es un array
+        if (Array.isArray(data)) {
+                displayDoctors(data);
+            
+        } else {
+            console.error("Los doctores no están en un array:", doctors);
+        }
+    })
+    .catch(error => console.error('Error al buscar doctores:', error));
+}
+
+function displayDoctors(doctors) {
+    const resultsContainer = document.querySelector('.results-container');
+    resultsContainer.innerHTML = '';  // Limpiar resultados anteriores
+    
+    if (doctors.length === 0) {
+        resultsContainer.innerHTML = '<p>No se encontraron doctores</p>';
+    }
+
+    doctors.forEach(doctor => {
+        const doctorCard = document.createElement('div');
+        doctorCard.classList.add('opcion-medico');
+        
+        sexo = doctor.sexo == 'M'? "mars": "venus"; 
+        let imagen = null;
+        if (imagen == null){
+            imagen = doctor.sexo == "M" ? "https://w7.pngwing.com/pngs/945/530/png-transparent-male-avatar-boy-face-man-user-flat-classy-users-icon.png": "https://w7.pngwing.com/pngs/1006/489/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png"
+        }
+            
+        
+        doctorCard.innerHTML = `
+            <div class="card profile-header" id="${doctor.id}">
+                <div class="body">
+                    <div class="element profile-image">
+                        <img src="${imagen}" alt="${doctor.nombre}">
+                    </div>
+                    <div class="element info-contacto">
+                        <h4 class="nombre-medico"><strong>${doctor.nombre}</strong></h4>
+                        <h5 class="especialidad-medico"><i>${doctor.especialidad}</i></h5>
+                        <p><i class="fas fa-${sexo} sexo-medico"></i><p>
+                        <table>
+                            <tr><td><i class="fas fa-map-marker-alt"></i></td><td>${doctor.ciudad}</td></tr>
+                            <tr><td><i class="fas fa-phone"></i></td><td>${doctor.telefono}</td></tr>
+                            <tr><td><i class="fas fa-envelope"></i></td><td><a href="mailto:michael">${doctor.correo}</a></td></tr>
+
+                        </table>
+                    </div>
+                    <div class="element informacion">
+                        <label class="titulo_info">Convenio</label><p class="convenio-medico">${doctor.convenio}</p>
+                        <label class="titulo_info">Descripción</label><p class="descripcion-medico">${doctor.descripcion}</p>
+                        <label class="titulo_info">Estudios</label><p class="estudios-medico">${doctor.estudios}</p>
+
+                    </div>
+                </div>
+            </div>
+        `;
+        resultsContainer.appendChild(doctorCard);
+    });
+}

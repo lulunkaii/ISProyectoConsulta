@@ -47,18 +47,27 @@ def index():
     return render_template('buscador.html')
 
 
-@app.route('/doctors', methods=['GET', 'POST']) # Endpoint para obtener los doctores
-def get_doctors():
-    specialty = request.args.get('specialty', '')
-    
-    if specialty:
-        # Filtramos por especialidad si se proporciona
-        filtered_doctors = [doctor for doctor in doctors if specialty.lower() in doctor['specialty'].lower()]
-    else:
-        # Si no se proporciona especialidad, devolvemos todos los doctores
-        filtered_doctors = doctors
-        
-    return jsonify(filtered_doctors)
+
+# Ruta para obtener los filtros disponibles (especialidad, área, convenio)
+@app.route('/get_filters', methods=['GET'])
+def get_filters():
+    # Conectar a la base de datos
+    filtros = centro_medico.obtener_campos_filtros() # Obtener los campos de filtro
+    return jsonify(filtros) # Devolver los campos de filtro
+
+# Por verificar
+@app.route('/obtener_medicos', methods=['GET']) # Endpoint para obtener la lista de médicos
+def obtener_medicos():
+     # Obtener parámetros de la solicitud GET
+    especialidad = request.args.get('especialidad')
+    area = request.args.get('area')
+    convenio = request.args.get('convenio')
+    name = request.args.get('nombre')
+
+    medicos = centro_medico.obtener_medicos(especialidad, area, convenio, name) # Obtener la lista de médicos
+
+    print(medicos)
+    return jsonify(medicos) # Devolver la lista de médicos
 
 # @app.route('/reserva?medico=<int:doctor_id>', methods=['GET']) # Endpoint para obtener un doctor específico
 @app.route('/reserva?medico', methods=['GET']) # Endpoint para obtener un doctor específico
