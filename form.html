@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Cita</title>
+    <link rel="stylesheet" href="form_style.css">
+    <script src="form.js" defer></script>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2 class="form-title">Formulario de Cita</h2>
+        <form id="formCita">
+            <div class="form-group">
+                <label for="nombre" class="form-label">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="correo" class="form-label">Correo:</label>
+                <input type="email" id="correo" name="correo" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="rut" class="form-label">RUT:</label>
+                <input type="text" id="rut" name="rut" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fechaCita" class="form-label">Fecha y Hora de Cita:</label>
+                <input type="datetime-local" id="fechaCita" name="fechaCita" class="form-input" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="motivo" class="form-label">Motivo:</label>
+                <textarea id="motivo" name="motivo" rows="4" class="form-textarea" required></textarea>
+            </div>
+
+            <button type="submit" class="form-button">Enviar</button>
+        </form>
+    </div>
+
+</body>
+</html>
