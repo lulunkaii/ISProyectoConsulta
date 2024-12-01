@@ -7,45 +7,17 @@ from conexion_base_datos import ingresar_cita
 
 
 app = Flask(__name__) # Crear la aplicación Flask
-CORS(app, resources={r"/*": {"origins": "*"}}) # Permitir CORS (Reemplazar con la URL de la aplicación web)
+# CORS(app, resources={r"/*": {"origins": "*"}}) # Permitir CORS (Reemplazar con la URL de la aplicación web)
+CORS(app)
 
 centro_medico = CentroMedicoInterface()
 
 
 # Simulación de datos de doctores
-doctors = [
-    {'id': 1, 'name': 'Dr. Juan Pérez', 'specialty': 'Cardiología'},
-    {'id': 2, 'name': 'Dra. Ana Gómez', 'specialty': 'Pediatría'},
-    {'id': 3, 'name': 'Dr. Luis Rodríguez', 'specialty': 'Neurología'},
-    {'id': 4, 'name': 'Dr. Sergio Herrera', 'specialty': 'Dermatología'},
-    {'id': 5, 'name': 'Dra. Carolina Díaz', 'specialty': 'Psiquiatría'},
-    {'id': 6, 'name': 'Dr. Eduardo Sánchez', 'specialty': 'Oftalmología'},
-    {'id': 7, 'name': 'Dra. Elena Martínez', 'specialty': 'Ginecología'},
-    {'id': 8, 'name': 'Dr. Manuel Ramírez', 'specialty': 'Oncología'},
-    {'id': 9, 'name': 'Dra. Isabel Pérez', 'specialty': 'Urología'},
-    {'id': 10, 'name': 'Dr. Francisco López', 'specialty': 'Endocrinología'},
-    {'id': 11, 'name': 'Dra. Lourdes Fernández', 'specialty': 'Reumatología'},
-    {'id': 12, 'name': 'Dr. José Álvarez', 'specialty': 'Neumología'},
-    {'id': 13, 'name': 'Dra. Marta Sánchez', 'specialty': 'Oftalmología'},
-    {'id': 14, 'name': 'Dr. Carlos González', 'specialty': 'Traumatología'},
-    {'id': 15, 'name': 'Dra. Laura Martín', 'specialty': 'Psicología'},
-    {'id': 16, 'name': 'Dr. Enrique Torres', 'specialty': 'Cirugía General'},
-    {'id': 17, 'name': 'Dra. Patricia López', 'specialty': 'Geriatría'},
-    {'id': 18, 'name': 'Dr. Jorge Martínez', 'specialty': 'Inmunología'},
-    {'id': 19, 'name': 'Dra. Claudia Morales', 'specialty': 'Pediatría'},
-    {'id': 20, 'name': 'Dr. Javier Fernández', 'specialty': 'Neurocirugía'},
-    {'id': 21, 'name': 'Dra. María José Martínez', 'specialty': 'Ginecología'},
-    {'id': 22, 'name': 'Dr. Alfonso García', 'specialty': 'Dermatología'},
-    {'id': 23, 'name': 'Dra. Sandra Ruiz', 'specialty': 'Cardiología'},
-    {'id': 24, 'name': 'Dr. Luis Rodríguez', 'specialty': 'Cirugía Plástica'},
-    {'id': 25, 'name': 'Dra. Teresa García', 'specialty': 'Odontología'},
-]
 
-
-@app.route('/buscar', methods=['GET', 'POST']) # Endpoint para buscar doctores
+@app.route('/buscar', methods=['GET','POST']) # Endpoint para buscar doctores
 def index():
     return render_template('buscador.html')
-
 
 
 # Ruta para obtener los filtros disponibles (especialidad, área, convenio)
@@ -69,16 +41,24 @@ def obtener_medicos():
     print(medicos)
     return jsonify(medicos) # Devolver la lista de médicos
 
+@app.route('/buscar_medico', methods=['POST']) # Endpoint para obtener la página de reserva
+def buscar_medico():
+    return jsonify({'status': 'success'}), 200
+
 # @app.route('/reserva?medico=<int:doctor_id>', methods=['GET']) # Endpoint para obtener un doctor específico
-@app.route('/reserva?medico', methods=['GET']) # Endpoint para obtener un doctor específico
-def doctor_calendar(doctor_id):
-    id = request.args.get('id') # Obtener id de medico
+
+@app.route('/reserva', methods=['GET']) # Endpoint para obtener un doctor específico
+def agenda_medico():
+    # id_medico = request.args.get('id_medico') # Obtener id de medico
+    # doctor = centro_medico.obtener_doctor_por_id(id_medico) # Obtener el doctor por id
     
-    doctor = centro_medico.obtener_doctor_por_id(id) # Obtener el doctor por id
-    if id is None:
-        return jsonify({'error': 'ID inválido'}), 400
-    else:
-        return render_template("medico.html") # Renderizar la plantilla de doctor
+    print("en reserva")
+
+    # if id_medico is None:
+        # return jsonify({'error': 'ID inválido'}), 400
+    # return jsonify({'error': 'ID inválido'}), 400
+  
+    return render_template("medico.html") # Renderizar la plantilla de doctor
 
 
 @app.route('/obtener_horas_ocupadas', methods=['GET']) # Endpoint para obtener las horas ocupadas
@@ -115,6 +95,17 @@ def ingresar_cita_endpoint():
     except Exception as e: # Manejar errores
         print("Error:", e)
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'status': 'error', 'message': 'Ruta no encontrada'}), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({'status': 'error', 'message': 'Error interno del servidor'}), 500
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

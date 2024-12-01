@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Agenda del Médico</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='buscador_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='medico_style.css') }}">
 </head>
 <body>
 
@@ -31,6 +31,13 @@
         function clickeado(mes) {
             window.location.href = `monthly_calendar.html?mes=${mes}`;
         }
+
+        function obtenerParametroID(nombre) {
+            const urlParams = new URLSearchParams(window.location.search);
+            console.log(urlParams.get(nombre));
+            return urlParams.get(nombre);
+        }
+
     </script>
 
 </body>

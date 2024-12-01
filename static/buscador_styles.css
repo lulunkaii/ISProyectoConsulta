@@ -352,7 +352,7 @@ select::-webkit-appearance {
 }
 
 .card .body .profile-image{
-    /* float:center; */
+    display: inline-grid;
     padding-top: 45px;
     padding-left: 2%;
     padding-right: 2%;
@@ -360,6 +360,7 @@ select::-webkit-appearance {
 
 
 .card .body .profile-image img {
+    
     border-radius: 50%;
     max-width: 300px;
     width: 100%;
@@ -372,6 +373,11 @@ select::-webkit-appearance {
     min-width:  500px;
     background-color:#eff0d5 ;
     font-size: 20%;
+}
+
+.card .body .info_contacto p .fas{
+    text-align: center;
+    align-self: center;
 }
 
 .card .body .informacion{
@@ -400,7 +406,19 @@ select::-webkit-appearance {
 .card .body .especialidad-medico{
     font-size: 20px;
     background-color: #c4d4ab;
+    border-radius: 4px;
     text-align: center;
+}
+
+.contenedor-genero {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+}
+
+.contenedor-genero i {
+    /* font-size: 24px; Tamaño del ícono */
+    justify-self: left;
+    color: #000; /* Color del ícono */
 }
 
 .titulo_info{

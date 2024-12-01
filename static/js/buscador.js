@@ -118,11 +118,15 @@ function displayDoctors(doctors) {
                 <div class="body">
                     <div class="element profile-image">
                         <img src="${imagen}" alt="${doctor.nombre}">
+                        <button onclick="buscarAgendaMedico(${doctor.id})">
+                            Ir a agendar cita 
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </button> 
                     </div>
                     <div class="element info-contacto">
                         <h4 class="nombre-medico"><strong>${doctor.nombre}</strong></h4>
                         <h5 class="especialidad-medico"><i>${doctor.especialidad}</i></h5>
-                        <p><i class="fas fa-${sexo} sexo-medico"></i><p>
+                        <p class="contenedor-genero"><i class="fas fa-${sexo} sexo-medico"></i><p>
                         <table>
                             <tr><td><i class="fas fa-map-marker-alt"></i></td><td>${doctor.ciudad}</td></tr>
                             <tr><td><i class="fas fa-phone"></i></td><td>${doctor.telefono}</td></tr>
@@ -141,4 +145,45 @@ function displayDoctors(doctors) {
         `;
         resultsContainer.appendChild(doctorCard);
     });
+}
+
+
+// function buscarAgendaMedico(id) {
+//     console.log('Buscando agenda del médico con ID:', id);
+
+//     const data = {
+//         id_medico: id
+//     };  
+//     fetch('http://127.0.0.1:5000/buscar_medico', {  // Hay que asegurarse de establecer la dirección correcta
+//         method: 'POST', // Método de la solicitud
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//     })     
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! Status: ${response.status}`); // Lanza un error si la respuesta HTTP no es exitosa
+//         }
+//         return response.json();
+//     })
+//     .then(result => {
+//         console.log('Respuesta del servidor:', result);
+
+//         if (result.status === 'success') {
+//             // Redirige si todo está bien
+//             window.location.href = "http://127.0.0.1:5000/reserva" + id;
+//         } else {
+//             throw new Error(result.message || 'Error desconocido en el servidor');
+//         }
+//     })
+//     .catch(error => { // Captura cualquier error
+//         console.error('Error:', error);
+//         alert('Error al cargar agenda del médico');
+//     });
+    
+// }
+
+function buscarAgendaMedico(id){
+    window.location.href = `/reserva?id=${id}`;
 }

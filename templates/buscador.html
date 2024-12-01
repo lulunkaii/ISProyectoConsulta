@@ -46,7 +46,7 @@
 
                 <!-- Lista de doctores -->
 
-                <button id="selectButton" disabled>Seleccionar</button>
+                <button id="selectButton" disabled>Buscar</button>
 
             </div>
     </div>
@@ -58,14 +58,23 @@
                 <div class="body">
                     
                     <!-- imagen del perfil -->
-                    <div class="element profile-image " float="left"> <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt=""> </div>
+                    <div class="element profile-image " float="left"> 
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt=""> 
+                        <button>
+                            Ir a agendar cita 
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </button> 
+                    </div>
                 
 
                     <div class="element info-contacto">
                         <!-- nombre del doctor-->
                         <h4 class="nombre-medico"><strong>Michael Deo</strong></h4>
-                            <h5 class="especialidad-medico"><i> Cardiologo </i></h5>
-                            <p><i class="fas fa-${sexo}"></i></p>
+                            <h5 class="especialidad-medico contenedor-genero">
+                                <i class="fas fa-mars">    </i>
+                                <i>  Cardiologo </i>
+                            </h5>
+                            
                         <table>
                             
                             <tr>
