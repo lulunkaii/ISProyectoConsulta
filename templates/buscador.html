@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Búsqueda de Doctores</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='buscador_styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div id="loadingSpinner" class="spinner">
+        <div class="loader"></div>
+        <p id="loadingMessage">Cargando doctores...</p>
+    </div>
+    
+    
+    <div class="wrapper-container">
+            <h1>Búsqueda de Doctores</h1>
+            <div class="search-container">
+                <div class="filter-container">
+                    
+                
+                    <button class="filter-bar" id="clearFiltersButton">Limpiar filtros</button>
+                
+                    <!-- Filtro por especialidad -->
+                    <select class="filter-bar" id="especialidadFilter">
+                        <option value="">Especialidad</option>
+                    </select>
+
+                    <select class="filter-bar" id="areaFilter">
+                        <option value="">Área</option>
+                    </select>
+
+                    <select class="filter-bar" id="convenioFilter">
+                        <option value="">Convenio</option>
+                    </select>
+
+                    
+                </div>
+
+                
+                <input type="text" id="searchInput" placeholder="Buscar doctor por nombre">
+                
+
+                <!-- Lista de doctores -->
+
+                <button id="selectButton" disabled>Buscar</button>
+
+            </div>
+    </div>
+
+    <div class="results-container">
+        
+        <div class="opcion-medico">
+            <div class="card profile-header"> 
+                <div class="body">
+                    
+                    <!-- imagen del perfil -->
+                    <div class="element profile-image " float="left"> 
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt=""> 
+                        <button>
+                            Ir a agendar cita 
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </button> 
+                    </div>
+                
+
+                    <div class="element info-contacto">
+                        <!-- nombre del doctor-->
+                        <h4 class="nombre-medico"><strong>Michael Deo</strong></h4>
+                            <h5 class="especialidad-medico contenedor-genero">
+                                <i class="fas fa-mars">    </i>
+                                <i>  Cardiólogo </i>
+                            </h5>
+                            
+                        <table>
+                            
+                            <tr>
+                                <td><i class="fas fa-map-marker-alt"></i></td>
+                                <td>Concepción</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-phone"></i></td>
+                                <td>+56 9 2123 4526 7890</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-envelope"></i></td>
+                                <td>
+                                    <a href="mailto:michael">michel@gmail.com</a>
+                                </td>
+                            </tr>
+                           
+                        </table>
+                    </div>     
+                    
+                    <div class="element informacion">
+                        
+                        <label class="titulo_info">Convenio</label>
+                        <p class="convenio-medico">Isapre Banmedica</p>
+                        <label class="titulo_info">Descripción</label>
+                        <p class="descropcion-medico">Amplia experiencia con pacientes mayores a 60 años de edad con cuadro complejo. 20 años practicando medicina.</p>
+                        <label class="titulo_info">Estudios</label>
+                        <p class="estudios-medico">Universidad de Concepción</p>
+                    </div>
+
+                </div>                    
+            </div>                  
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/buscador.js') }}"></script>
+</body>
+</html>

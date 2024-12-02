@@ -164,7 +164,7 @@ function generateWeeklyCalendar(day, month, year) {
                     this.classList.add("in_process");
                     selectionMatrix[hourIndex][dayIndex] = 1;
                     // Redirigir a la página de formulario con la fecha y hora seleccionadas
-                    window.location.href = `form.html?fechaCita=${encodeURIComponent(formattedDate + 'T' + hour + ':00')}`;
+                    window.location.href = `/reserva/rellenar-datos?fechaCita=${encodeURIComponent(formattedDate + 'T' + hour + ':00')}`;
                 }
             };
 

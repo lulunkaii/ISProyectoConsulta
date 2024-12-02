@@ -148,3 +148,41 @@ def get_medicos_sexo(sexo, conn=None):
         conn.close()
     return medicos
 
+def get_medico_multiples_filtros(especialidad, area, convenio, name):
+
+    # Realiza la consulta a la base de datos con los parámetros
+    conn = sqlite3.connect('centro_medico.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    query = "SELECT * FROM medicos WHERE 1=1"
+
+    # Construye la consulta dinámica según los parámetros recibidos
+    params = []
+    if especialidad:
+        query += " AND especialidad = ?"
+        params.append(especialidad)
+    if area:
+        query += " AND ciudad = ?"
+        params.append(area)
+    # if convenio:
+    #     query += " AND convenio = ?"
+    #     params.append(convenio)
+    if name:
+        query += " AND nombre LIKE ?"
+        params.append(f"%{name}%")
+
+    # Ejecutar la consulta con los parámetros
+    cursor.execute(query, tuple(params))
+    result = cursor.fetchall()
+    conn.close()
+
+    return result
+
+# Función para obtener datos de la base de datos
+def fetch_data_from_db(table_name):
+    conn = sqlite3.connect('centro_medico.db')
+    cursor = conn.cursor()
+    data = cursor.execute(f"SELECT * FROM {table_name}").fetchall()
+    conn.close()
+    return data

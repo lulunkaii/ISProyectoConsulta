@@ -1,7 +1,22 @@
+id_med= 1; // ID del médico (de momento, se establece en 1 para pruebas)
+
+function showCustomAlert() {
+    // Create a custom alert box with SweetAlert
+    Swal.fire({
+        title: 'Cita agendada correctamente',
+        text: 'Volver a la página de reservas',
+        confirmButtonText: 'OK',
+    })
+    .then((result) => {
+        window.location.href = "http://127.0.0.1:5000/reserva?id_medico=${id_med}"; // Redirect to the reservation page
+    });
+}
+
 // Espera a que el contenido del documento se haya cargado completamente
 document.addEventListener("DOMContentLoaded", function() {
     // Obtiene los parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
+    
     // Obtiene el valor del parámetro 'fechaCita'
     const fechaCita = urlParams.get('fechaCita');
     
@@ -18,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Obtiene los datos del formulario
         const formData = new FormData(form);
         const data = { // Crea un objeto con los datos del formulario
-            id_medico: 1, // ID del médico (de momento, se establece en 1 para pruebas)
+            id_medico: id_med, // ID del médico (de momento, se establece en 1 para pruebas)
             usuario_rut: formData.get('rut'),
             fecha: formData.get('fechaCita'),
             motivo: formData.get('motivo')
@@ -31,11 +46,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        })
+        })       
         .then(response => response.json())
         .then(result => { // Maneja la respuesta del backend
             if (result.status === 'success') {
-                window.location.href = "medico.html";
+                // alert('Cita agendada correctamente');
+                showCustomAlert();
+                
             } else { // Maneja el error si la solicitud no se completó correctamente
                 alert('Error al enviar la cita');
             }
