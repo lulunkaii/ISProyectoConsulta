@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Agenda del Médico - Calendario Semanal</title>
     <!-- Enlace al archivo de estilos CSS para el calendario semanal -->
-    <link rel="stylesheet" href="weekly_calendar_style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='weekly_calendar_style.css') }}">
 </head>
 <body>
     <!-- Contenedor principal del calendario -->
@@ -15,6 +15,6 @@
         <div id="calendarContainer"></div>
     </div>
     <!-- Enlace al archivo JavaScript para la lógica del calendario semanal -->
-    <script src="weekly_calendar.js"></script>
+    <script src="{{ url_for('static', filename='js/weekly_calendar.js') }}"></script>
 </body>
 </html>

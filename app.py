@@ -52,7 +52,6 @@ def agenda_medico():
     # id_medico = request.args.get('id_medico') # Obtener id de medico
     # doctor = centro_medico.obtener_doctor_por_id(id_medico) # Obtener el doctor por id
     
-    print("en reserva")
 
     # if id_medico is None:
         # return jsonify({'error': 'ID inválido'}), 400
@@ -60,6 +59,19 @@ def agenda_medico():
   
     return render_template("medico.html") # Renderizar la plantilla de doctor
 
+
+@app.route('/reserva/mes', methods=['GET']) #  Endpoint para obtener el calendario mensual
+def calendario_mensual():
+    return render_template("monthly_calendar.html")
+
+@app.route('/reserva/semana', methods=['GET']) # Endpoint para obtener el calendario semanal   
+def calendario_semanal():
+    return render_template("weekly_calendar.html")
+
+
+@app.route('/reserva/rellenar-datos', methods=['GET']) # Endpoint para obtener el calendario diario
+def rellenar_datos():
+    return render_template("form.html")
 
 @app.route('/obtener_horas_ocupadas', methods=['GET']) # Endpoint para obtener las horas ocupadas
 def obtener_horas_ocupadas():

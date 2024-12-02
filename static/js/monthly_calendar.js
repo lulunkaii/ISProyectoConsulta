@@ -69,7 +69,7 @@ function generateMonthlyCalendar(month, year) {
         button.className = "date-button";
         button.innerHTML = day;
         button.onclick = function () {
-            window.location.href = `weekly_calendar.html?semana=true&dia=${day}&mes=${month}&ano=${year}`;
+            window.location.href = `/reserva/semana?semana=true&dia=${day}&mes=${month}&ano=${year}`;
         };
 
         datesDiv.appendChild(button);

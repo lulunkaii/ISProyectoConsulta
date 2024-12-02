@@ -40,7 +40,8 @@ def crear_base_de_datos():
         especialidad TEXT NOT NULL,
         descripcion TEXT,
         estudios TEXT,
-        ciudad TEXT
+        ciudad TEXT,
+        telefono INTEGER
     )
     ''')
 
@@ -84,14 +85,18 @@ def ingresar_usuario(rut, nombre, email, edad,numero_telefonico):
     conn.commit()
     conn.close()
 
-def ingresar_medico(rut, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad):
+def ingresar_medico(rut, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad, telefono):
 
-    rut_num = int(re.sub('[^0-9]','', rut))
+    rut_num = rut
+    if rut.isnumeric() == False:
+        rut_num = int(re.sub('[^0-9]','', rut))
+
+    
 
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO medicos VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?)", (rut_num, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad))
+    cursor.execute("INSERT INTO medicos VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (rut_num, nombre, sexo, correo, especialidad, descripcion, estudios, ciudad, telefono))
     conn.commit()
 
     lista = cursor.execute("SELECT * FROM medicos").fetchall()
