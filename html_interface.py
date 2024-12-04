@@ -26,7 +26,6 @@ class CentroMedicoInterface:
         # Devolver la lista de diccionarios directamente
         return horas_agendadas
 
-    # Por verificar
     def obtener_agenda_medico(self, id_medico):
         # Obtener la agenda del médico desde la base de datos y formatearla
         agenda = fetch_data_from_db("agendas")
@@ -34,8 +33,8 @@ class CentroMedicoInterface:
         
         for row in agenda:
             try:
-                if row[0] == id_medico: # Comprobar si el ID del médico coincide
-                    fecha = row[1] # La fecha está en la segunda columna
+                if row[1] == int(id_medico): # Comprobar si el ID del médico coincide
+                    fecha = row[2] # La fecha está en la tercera columna
                     fecha_part = fecha.split("T")[0] # Separar la fecha de la hora
                     hora_part = int(fecha.split("T")[1].split(":")[0]) # Obtener la hora
                     agenda_medico.append({"fecha": fecha_part, "hora": hora_part}) # Agregar a la lista

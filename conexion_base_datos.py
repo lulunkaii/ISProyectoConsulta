@@ -109,10 +109,22 @@ def ingresar_medico(rut, nombre, sexo, correo, especialidad, descripcion, estudi
 def ingresar_hora_agenda(medico_id, fecha):
     conn = sqlite3.connect('centro_medico.db')
     cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO agendas (medico_id, fecha)
+        VALUES (?, ?)
+    ''', (medico_id, fecha))
+    conn.commit()
+    conn.close()
 
-    fecha = str(fecha)
+    verificar_y_eliminar_fechas_duplicadas()
 
-    cursor.execute("INSERT INTO agendas VALUES(NULL, ?, ?)", (medico_id, fecha))
+def eliminar_hora_agenda(medico_id, fecha):
+    conn = sqlite3.connect('centro_medico.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        DELETE FROM agendas
+        WHERE medico_id = ? AND fecha = ?
+    ''', (medico_id, fecha))
     conn.commit()
     conn.close()
 
@@ -195,5 +207,32 @@ def imprimir_base_de_datos():
     print(cursor.execute("SELECT * FROM agendas").fetchall())
     print("Tabla usuarios")
     print(cursor.execute("SELECT * FROM usuarios").fetchall())
+
+    conn.close()
+
+def verificar_y_eliminar_fechas_duplicadas():
+    conn = sqlite3.connect('centro_medico.db')
+    cursor = conn.cursor()
+
+    # Verificar fechas duplicadas
+    duplicados = cursor.execute('''
+        SELECT fecha, COUNT(*)
+        FROM agendas
+        GROUP BY fecha, medico_id
+        HAVING COUNT(*) > 1
+    ''').fetchall()
+
+    if duplicados:
+
+        # Eliminar fechas duplicadas
+        cursor.execute('''
+            DELETE FROM agendas
+            WHERE rowid NOT IN (
+                SELECT MIN(rowid)
+                FROM agendas
+                GROUP BY fecha, medico_id
+            )
+        ''')
+        conn.commit()
 
     conn.close()

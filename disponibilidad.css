@@ -1,0 +1,75 @@
+/* Estilo general del cuerpo de la página */
+body {
+    background: #fad390; /* Color de fondo */
+    font-family: 'Questrial', sans-serif; /* Fuente de texto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura de la ventana gráfica */
+    margin: 0; /* Eliminar márgenes */
+}
+
+/* Estilo del contenedor del calendario */
+.calendar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff; /* Fondo blanco */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: 0px 40px 30px -20px rgba(0, 0, 0, 0.3); /* Sombra */
+}
+
+/* Estilo del título del calendario */
+#calendarTitle {
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+/* Estilo de la tabla del calendario semanal */
+.calendar-weekly {
+    border-collapse: collapse; /* Colapsar bordes */
+    width: 100%; /* Ancho completo */
+    max-width: 800px; /* Ancho máximo */
+    background: #fff; /* Fondo blanco */
+    box-shadow: 0px 40px 30px -20px rgba(0, 0, 0, 0.3); /* Sombra */
+    border-radius: 5px; /* Bordes redondeados */
+    overflow: hidden; /* Ocultar desbordamiento */
+    text-align: center; /* Alinear texto al centro */
+}
+
+/* Estilo de las celdas y encabezados de la tabla */
+.calendar-weekly th, .calendar-weekly td {
+    padding: 0; /* Sin espaciado interno */
+    border: 1px solid #464646; /* Borde gris oscuro */
+    width: 75px; /* Ancho fijo para cada celda */
+    height: 40px; /* Altura fija para cada celda */
+}
+
+/* Estilo de los encabezados de la tabla */
+.calendar-weekly th {
+    background-color: #f6e58d; /* Fondo amarillo claro */
+    color: #333; /* Color del texto */
+}
+
+/* Estilo de los botones de fecha y hora */
+.date-button, .hour-button {
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Altura completa */
+    background-color: lightgray; /* Fondo gris claro */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor de puntero */
+    display: block;
+    box-sizing: border-box; /* Incluir relleno y borde en el tamaño total */
+    padding: 0; /* Sin espaciado interno */
+}
+
+/* Estilo de los botones al pasar el cursor */
+.date-button:hover, .hour-button:hover {
+    background-color: gray; /* Fondo gris oscuro */
+}
+
+/* Estilo de los botones seleccionados */
+.hour-button.selected {
+    background-color: #4CAF50;
+    color: white;
+}

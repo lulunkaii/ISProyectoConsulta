@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from datetime import datetime, timedelta
 from html_interface import CentroMedicoInterface
-from conexion_base_datos import ingresar_cita, ingresar_hora_agenda, eliminar_cita, ingresar_medico
+from conexion_base_datos import ingresar_cita, ingresar_hora_agenda, eliminar_cita, ingresar_medico, eliminar_hora_agenda
 
 app = Flask(__name__) # Crear la aplicación Flask
 CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}}) # Permitir CORS (Reemplazar con la URL de la aplicación web)
@@ -27,11 +27,9 @@ def obtener_horas_ocupadas():
 
     return jsonify(horas_filtradas) # Devolver las horas ocupadas en la semana
 
-# Por verificar
 @app.route('/obtener_agenda_medico', methods=['GET']) # Endpoint para obtener la agenda de un médico
 def obtener_agenda_medico():
     id_medico = request.args.get('id_medico') # Obtener el ID del médico de la solicitud
-
     fecha = request.args.get('fecha') # Obtener la fecha de la solicitud
 
     # Convertir la fecha solicitada a un objeto datetime
@@ -44,7 +42,7 @@ def obtener_agenda_medico():
     agenda_medico = centro_medico.obtener_agenda_medico(id_medico) # Obtener la agenda del médico
 
     # Filtrar las horas de la agenda dentro del rango de la semana
-    agenda_filtrada = [hora for hora in agenda_medico if start_of_week <= datetime.strptime(hora['fecha'], '%Y-%m-%d') <= end_of_week]
+    agenda_filtrada = [hora for hora in agenda_medico if start_of_week <= datetime.strptime(hora['fecha'].split('T')[0], '%Y-%m-%d') <= end_of_week]
 
     return jsonify(agenda_filtrada) # Devolver la agenda del médico en la semana
 
@@ -85,16 +83,31 @@ def cancelar_cita_endpoint():
         print("Error:", e)
         return jsonify({'status': 'error', 'message': str(e)}), 500
     
-# Por verificar
 @app.route('/ingresar_agenda', methods=['POST']) # Endpoint para ingresar una agenda
 def ingresar_agenda_endpoint():
     try:
         data = request.get_json() # Obtener los datos de la solicitud
         id_medico = data['id_medico']
+        horas = data['horas']
+
+        for fecha in horas:
+            ingresar_hora_agenda(id_medico, fecha)
+
+        return jsonify({'status': 'success'}), 200 # Devuelve un mensaje de éxito
+    except Exception as e: # Manejar errores
+        print("Error:", e)
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+    
+@app.route('/eliminar_hora_agenda', methods=['POST']) # Endpoint para eliminar una hora de la agenda
+def eliminar_hora_agenda_endpoint():
+    try:
+        data = request.get_json() # Obtener los datos de la solicitud
+        id_medico = data['id_medico']
         fecha = data['fecha']
-        
-        # Llama a la función para ingresar la agenda
-        ingresar_hora_agenda(id_medico, fecha)        
+
+        eliminar_hora_agenda(id_medico, fecha) # Llama a la función para eliminar la hora
+        print(f"Hora {fecha} eliminada como disponible para el médico {id_medico}")
+
         return jsonify({'status': 'success'}), 200 # Devuelve un mensaje de éxito
     except Exception as e: # Manejar errores
         print("Error:", e)
