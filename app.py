@@ -14,6 +14,9 @@ centro_medico = CentroMedicoInterface()
 
 
 # Simulación de datos de doctores
+@app.route('/')
+def home():
+    return render_template('main_page.html')
 
 @app.route('/buscar', methods=['GET','POST']) # Endpoint para buscar doctores
 def index():
@@ -107,6 +110,7 @@ def ingresar_cita_endpoint():
     except Exception as e: # Manejar errores
         print("Error:", e)
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 @app.errorhandler(404)
 def not_found(error):
